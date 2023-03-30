@@ -1,0 +1,59 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100&family=Manrope:wght@300&display=swap');
+.massage-card{
+    max-width: 40%;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    
+}
+
+
+
+
+.name{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.massage-text{
+    font-size: 17px;
+    font-family: 'Manrope', sans-seri;
+    color: white;
+    padding: 8px;
+
+}
+
+.img{
+    background-color: #ddddf7;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    object-fit:fill;
+}
+
+.img-and-name-container{
+    flex:2;
+    padding-left: 16px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-container{
+    padding-bottom: 2px;
+    text-align: left;
+    display: flex;
+    flex:14;
+    background-color:hsl(226, 78%, 75%,0.7);
+    border-radius: 8px;
+    min-height: 20px;
+    align-items: center;
+
+
+
+}

@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100&display=swap');
+
+
+.user-block-container{
+    height: 70px;
+    background-color: #3e3c61;
+    box-shadow: 0 0 0.9px rgb(210, 198, 198);
+    font-family:'Heebo', sans-serif;
+    font-weight: bolder;
+}
+
+.user-block-container:hover{
+    background-color: #2f2d52;
+
+}
+
+img{
+    background-color: #ddddf7;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 8px;
+   
+}
+
+
+.name-div{
+    font-size: 19px;
+    width: 80%;
+    color: white;
+}
+
+.massage-div{
+    width: 80%;
+    font-size: 12px;
+    color: lightgray;
+
+}
+
+.details-container{
+    width: 80%;
+}
+

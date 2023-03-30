@@ -1,0 +1,49 @@
+.RegisterContainer{
+    width: 55%;
+    height: 60%;
+}
+
+.RgistrationCard{
+    border: 4px solid;
+    background-color: rgba(62, 231, 197,0.8);
+    height: 100%;
+    width: 100%;
+    border-radius: 30px;
+}
+
+.header{
+    margin: 4%;
+}
+
+.bodyOfReg{
+    margin: 2%;
+    width: 60%;
+}
+
+.element{
+    margin: 15px;
+    font-size: 20px;
+}
+
+input{
+    background-color: rgb(44, 51, 113);
+    border-radius: 6px ;
+    color: white;
+    height: 30px;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: center;
+}
+
+#btn{
+    width: 70px;
+    height: 40px;
+    border-radius: 4px;
+
+}
+
+input::placeholder{
+    padding-left: 6px;
+}

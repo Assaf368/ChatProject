@@ -1,0 +1,28 @@
+#navbar{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    background-color: rgb(87, 65, 105);
+    padding: 10px;
+    color: white;
+    
+}
+
+.link{
+    padding: 8px 12px;
+    background-color: white;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 4px
+}
+
+.navbar-line {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1600px;
+    margin: auto
+}
+
