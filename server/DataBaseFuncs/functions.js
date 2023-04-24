@@ -96,13 +96,8 @@ const FindGroupsForUserAsync = async (username) => {
 };
 
 const GetFullChatDetails = async (roomId) => {
-  const room = await Room.findById(roomId);
-  if (room) {
-    return room;
-  } else {
-    return null;
-  }
-};
+  return await Room.findById(roomId);
+}
 
 const CreateRoomAsync = async (usernames, roomName, desc, img) => {
   const usersPromises = usernames.map(async (username) => {
