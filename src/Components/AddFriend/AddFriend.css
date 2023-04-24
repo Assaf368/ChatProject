@@ -1,0 +1,35 @@
+.add-friend-container{
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    width: 30%;
+    height: 40%;
+    background-color: #313856;
+    border-radius: 18px;
+    align-items: center;
+    color: white;
+    
+}
+.inputs-container{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6%;
+
+}
+
+.search-btn-of-addFriend{
+    width: 30%;
+    height: 40px;
+    margin: 14px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.input-of-addFreind{
+    width: 70%;
+    text-align: center;
+}

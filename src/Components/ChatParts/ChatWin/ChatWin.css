@@ -1,4 +1,5 @@
 .chat-info {
+  display: flex;
   border-bottom: 1px solid;
   background-color: #5d5b8d;
   flex: 1;
@@ -9,11 +10,27 @@
 }
 
 .info-element {
-  margin: 18px;
+  margin: 10px;
   font-weight: bold;
   cursor: pointer;
 
 }
+
+.options-btn{
+  cursor: pointer;
+  background-color: #5d5b8d;
+  border: 0px;
+  background-image: url('https://icon-library.com/images/more-icon-png/more-icon-png-1.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position:  center;
+  background-size: 50%;
+  border-radius: 12px;
+}
+.options-btn:focus {
+  outline: none;
+}
+
 
 .img-icon {
   background-color: #5d5b8d;
@@ -29,6 +46,10 @@
   flex: 7;
   background-color: #ddddf7;
   padding-top: 6px;
+}
+
+.chat-icons{
+  display: flex;
 }
 
 .massages-card::-webkit-scrollbar {
@@ -61,7 +82,7 @@
   
 
 }
-.input-element {
+.text-massage-input {
   width: 100%;
   height: 100%;
   background-color: white;
@@ -93,4 +114,13 @@
   border: 0px;
   cursor: pointer;
   font-size: 16px;
+}
+
+.non-selcted-room-view{
+  display: flex;
+  font-size: 36px;
+  background-color: #f1e9e9a0;
+  flex: 2;
+  align-items: center;
+  justify-content: center; 
 }

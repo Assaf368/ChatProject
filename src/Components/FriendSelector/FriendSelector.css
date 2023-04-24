@@ -1,0 +1,46 @@
+.friend-selector-container{ 
+    display: flex;
+    background-color: white;
+    box-shadow: 0 0 2px rgb(85, 82, 82);
+    min-height: 50px;
+
+}
+.friend-selector-container:hover{
+    background-color: #9aa0e3;
+}
+.friend-selector-img-container{
+    display: flex;
+    align-items: center;
+    flex:1;
+    height: 100%;
+}
+.friend-selector-img{
+    background-color: #ddddf7;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 8px;
+   
+    
+}
+.friend-selector-username-container{
+    flex:5;
+    display: flex;
+    font-size: 20px;
+    justify-content: start;
+    align-items: center;
+    margin-left: 12px;
+}
+
+.friend-selector-checkbox-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.checkbox{
+    width: 18px;
+}
+

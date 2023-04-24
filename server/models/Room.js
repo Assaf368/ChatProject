@@ -1,14 +1,27 @@
 const mongoose = require('mongoose');
-const User = require('./User');
+const Massage = require('./Massage');
 
 const roomSchema = new mongoose.Schema({
+  name:{
+    type:String,
+    required:true,
+    maxlength: 30,
+    minlength: 1
+},
     members: {
         type: [{
           type: mongoose.Schema.Types.ObjectId,
-          ref: User,
+          ref: 'User',
           required: true
         }],
-        validate: [arrayLimit, '{PATH} exceeds the limit of 50']
+        validate: [arrayLimit, ' exceeds the limit of 50']
+      },
+      massages: {
+        type: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: Massage,
+          required: false
+        }],
       },
     description:{
         type:String,

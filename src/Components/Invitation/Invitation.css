@@ -1,0 +1,20 @@
+.invitation-container{
+    display: flex;
+    margin: 10px;
+}
+#invitation-btn{
+    border-radius: 6px;
+    border: 0px;
+    background-color: rgb(101, 98, 152);
+    color: white;
+    height: 26px;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-left: 10px;
+}
+
+.text{
+    font-size: 20px;
+    font-weight: bold;
+
+}

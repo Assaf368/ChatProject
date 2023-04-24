@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const Room = require('./Room');
-const User = require('./User');
+
 
 const massageSchema = new mongoose.Schema({
     text:{
@@ -8,9 +7,14 @@ const massageSchema = new mongoose.Schema({
         required: true,
         minlength:1
     },
+    name:{
+        type:String,
+        required: true,
+        minlength:1
+    },
     sender:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        ref: 'User',
         required: true
     },
     date:{
@@ -19,7 +23,7 @@ const massageSchema = new mongoose.Schema({
     },
     target:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: Room,
+        ref: 'Room',
         required: true
     }
 });

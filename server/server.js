@@ -5,16 +5,18 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routesHandler = require('./routes/handler');
+const http = require("http");
 
 
 
 mongoose.connect('mongodb://127.0.0.1/chatDb', {useNewUrlParser: true, useUnifiedTopology:true})
 .then(()=>{
-    console.log("mongo connection is open!")
+    console.log("mongo connection is open!");
 })
 .catch(err => {
     console.log(err);
 })
+
 
 
 app.use(cors({
@@ -22,9 +24,20 @@ app.use(cors({
 }))
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
+app.options('/api/home', cors({
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST']
+  }));
+
+
 app.use('/', routesHandler);
 
+const server = http.createServer(app);
 
-app.listen(5000, ()=>{
+const { io } = require('./routes/socket')(server);
+
+
+
+server.listen(5000, ()=>{
     console.log("running server on 5000...")
 });

@@ -13,13 +13,27 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         maxlength:200
     },
+    isAdmin:{
+        type: Boolean,
+        required: false
+    },
+    isOnline:{
+        type: Boolean,
+        required: true,
+        default: false
+        
+    },
+    socketId:{
+        type: String,
+        required: false
+    },
     image:{
         type: String,
-        required: [false, '']
+        required: false
     },
     status:{
         type: String,
-        required : [false, ''],
+        required : false,
         minlength: 1,
         maxlength:40
     }
