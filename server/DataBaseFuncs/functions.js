@@ -49,7 +49,9 @@ const _GetFriendFromRequest = async (user, friendshipRequest) => {
   return friend
 }
 
-
+const Stam = ()=>{
+  
+}
 const _GetFriendFromRequestsAsync = async (user, friendshipRequests) => {
   const friendsPromises = friendshipRequests.map((friendshipRequst) => {
     return _GetFriendFromRequest(user, friendshipRequst)
