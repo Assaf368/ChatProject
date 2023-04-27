@@ -34,90 +34,90 @@ const _GetAcceptedFriendshipRequestsAsync = async (user) => {
   return friendshipRequests;
 };
 
-
 const _GetFriendFromRequest = async (user, friendshipRequest) => {
-  let friend = null
-  const targetId = friendshipRequest.target._doc._id.toString()
-  const senderId = friendshipRequest.sender._doc._id.toString()
+  let friend = null;
+  const targetId = friendshipRequest.target._doc._id.toString();
+  const senderId = friendshipRequest.sender._doc._id.toString();
 
   if (targetId === user.id) {
     friend = User.findById(senderId);
   } else {
-    friend =  User.findById(targetId);
+    friend = User.findById(targetId);
   }
-  
-  return friend
-}
+  return friend;
+};
 
-const Stam = ()=>{
-  
-}
 const _GetFriendFromRequestsAsync = async (user, friendshipRequests) => {
   const friendsPromises = friendshipRequests.map((friendshipRequst) => {
-    return _GetFriendFromRequest(user, friendshipRequst)
+    return _GetFriendFromRequest(user, friendshipRequst);
   });
-
   return await Promise.all(friendsPromises);
-}
+};
 
 const _GetFriendsAsync = async (user) => {
-  let friends = null
-  const acceptedFriendshipRequests = _GetAcceptedFriendshipRequestsAsync(user);
+  let friends = null;
+  const acceptedFriendshipRequests = await _GetAcceptedFriendshipRequestsAsync(user);
 
   if (acceptedFriendshipRequests) {
-    friends = _GetFriendFromRequestsAsync(user, acceptedFriendshipRequests)
+    friends = _GetFriendFromRequestsAsync(user, acceptedFriendshipRequests);
   }
 
-  return friends
-}
+  return friends;
+};
 
 const FindUserFriendsAsync = async (username) => {
   const user = await GetUserAsync(username);
-  let friends = null
-  
-  if (user) {
-    friends = _GetFriendsAsync(user)
-  } 
-  return friends
-};
+  let friends = null;
 
-const FindGroupsForUserAsync = async (username) => {
-  const user = await GetUserAsync(username);
   if (user) {
-    const roomsPromises = Room.find({ members: { $in: [user.id] } }).select(
-      "_id name img"
-    );
-    const roomsForShow = await Promise.resolve(roomsPromises);
-    if (roomsForShow) {
-      return roomsForShow;
-    }
-    return null;
-  } else {
-    return null;
+    friends = _GetFriendsAsync(user);
   }
+  return friends;
 };
 
-const GetFullChatDetails = async (roomId) => {
-  return await Room.findById(roomId);
+const _GetPreviewGroupsAsync = async (user) => {
+  const previewGroups = await Room.find({ members: { $in: [user.id] } }).select(
+    "_id name img"
+  );
+  return previewGroups;
+};
+
+const FindPreviewGroupsForUserAsync = async (username) => {
+  const user = await GetUserAsync(username);
+  let previewGroups = null;
+  if (user) {
+    previewGroups = await _GetPreviewGroupsAsync(user);
+  } 
+  return previewGroups;
+};
+
+
+const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
+  const nowTime = new Date();
+  const ids = users.map((user) => user.id);
+  const room = new Room({
+    members: ids,
+    name: roomName,
+    description: desc,
+    img: img,
+    date: nowTime,
+    massages: null,
+  });
+  await room.save();
+  return room;
 }
 
-const CreateRoomAsync = async (usernames, roomName, desc, img) => {
+const GetUsersByUsernamesAsync = async(usernames)=>{
   const usersPromises = usernames.map(async (username) => {
     return GetUserAsync(username);
   });
-  const users = await Promise.all(usersPromises);
+   return await Promise.all(usersPromises);
+}
+
+const CreateRoomAsync = async (usernames, roomName, desc, img) => {
+  const users = await GetUsersByUsernamesAsync(usernames);
   if (users) {
-    const nowTime = new Date();
-    const ids = users.map((user) => user.id);
-    const room = new Room({
-      members: ids,
-      name: roomName,
-      description: desc,
-      img: img,
-      date: nowTime,
-      massages: null,
-    });
-    await room.save();
+    const room = _SaveRoomToDbAsync(users, roomName,desc,img);
     const resObj = {
       roomId: room.id,
       massages: room.massages,
@@ -131,5 +131,6 @@ module.exports = {
   SendInvitationAsync,
   FindFriendsForUserAsync: FindUserFriendsAsync,
   CreateRoomAsync,
-  FindGroupsForUserAsync,
+  FindGroupsForUserAsync: FindPreviewGroupsForUserAsync,
+  GetUsersByUsernamesAsync
 };
