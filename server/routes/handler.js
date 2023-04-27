@@ -4,11 +4,12 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const Friend = require("../models/Friend");
+const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
-
-
 const jwt = require("jsonwebtoken");
-const { FindByUserNameAsync, FindAllFrirndsDataAsync, CreateRoomAsync, FindFriendsForUserAsync, FindGroupsForUserAsync } = require("../DataBaseFuncs/functions");
+const { FindByUserNameAsync, FindFriendsForUserAsync, FindGroupsForUserAsync } = require("../DataBaseFuncs/functions");
+
+
 
 function authenticateToken(req, res, next) {
 
@@ -141,7 +142,9 @@ router.get('/api/home/friendsdata',async(req,res) =>{
 });
 
 router.get('/api/home/getfullchat', async(req,res)=>{
-  
+  const {roomId} = req.body;
+  const chat = await Room.findById(roomId);
+  res.send(chat);
 })
 
 
