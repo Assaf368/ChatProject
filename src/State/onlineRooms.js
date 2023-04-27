@@ -18,9 +18,7 @@ export const onlineRoomsSlice = createSlice({
             state.chats.push(action.payload);
         },
         SetSelectedChat:(state,action) =>{
-            axios.get('/home/getfullchat',{roomId : action.payload}).then(res=>{
-                
-            })
+                state.selectedChat = action.payload.selectedChat;
         }
         
     }

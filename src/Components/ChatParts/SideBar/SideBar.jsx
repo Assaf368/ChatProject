@@ -4,23 +4,26 @@ import { useEffect, useState } from 'react'
 import { Between } from 'UiKit/Layouts/Line/Line'
 import { RoomBlock } from '../RoomBlock/RoomBlock'
 import './SideBar.css'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import { SetFriends } from 'State/userDetails'
 import { SwichPickFriendsState } from 'State/toggle'
 import { OnCreateRoomClient } from 'State/socket'
-import { AddChatToRedux, SetChats, SetSelectedChat } from 'State/onlineRooms'
+import { AddChatToRedux, SetSelectedChat } from 'State/onlineRooms'
 
 export const SideBar = ({id,userName})=>{
   const dispatch = useDispatch();
   const[clientRooms,SetClientRooms] = useState([]);
-
   const HandleSwichPickFriendsState = () =>{
     dispatch(SwichPickFriendsState());
   }
 
   const HandleRoomClick = (roomId)=>{
     const selectedChatId = roomId;
-    dispatch(SetSelectedChat({selectedChat:selectedChatId}));
+    let selectedChat = null;
+    axios.get('/home/getfullchat',{params:{roomId: selectedChatId}}).then((res)=>{
+      selectedChat = res.data.chat;
+      dispatch(SetSelectedChat({selectedChat: selectedChat}));
+    })
   }
   useEffect(()=>{
     axios.get('/home/friendsdata',{ params: {

@@ -142,9 +142,12 @@ router.get('/api/home/friendsdata',async(req,res) =>{
 });
 
 router.get('/api/home/getfullchat', async(req,res)=>{
-  const {roomId} = req.body;
+  const roomId = req.query.roomId;
   const chat = await Room.findById(roomId);
-  res.send(chat);
+  const data = {
+    chat : chat
+  }
+  res.send(data);
 })
 
 
