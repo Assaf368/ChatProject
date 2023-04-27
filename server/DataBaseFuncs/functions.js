@@ -56,7 +56,7 @@ const _GetFriendFromRequestsAsync = async (user, friendshipRequests) => {
 
 const _GetFriendsAsync = async (user) => {
   let friends = null;
-  const acceptedFriendshipRequests = _GetAcceptedFriendshipRequestsAsync(user);
+  const acceptedFriendshipRequests = await _GetAcceptedFriendshipRequestsAsync(user);
 
   if (acceptedFriendshipRequests) {
     friends = _GetFriendFromRequestsAsync(user, acceptedFriendshipRequests);
@@ -107,7 +107,7 @@ const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
   return room;
 }
 
-const _GetUsersByUsernamesAsync = async(usernames)=>{
+const GetUsersByUsernamesAsync = async(usernames)=>{
   const usersPromises = usernames.map(async (username) => {
     return GetUserAsync(username);
   });
@@ -115,7 +115,7 @@ const _GetUsersByUsernamesAsync = async(usernames)=>{
 }
 
 const CreateRoomAsync = async (usernames, roomName, desc, img) => {
-  const users = await _GetUsersByUsernamesAsync(usernames);
+  const users = await GetUsersByUsernamesAsync(usernames);
   if (users) {
     const room = _SaveRoomToDbAsync(users, roomName,desc,img);
     const resObj = {
@@ -132,4 +132,5 @@ module.exports = {
   FindFriendsForUserAsync: FindUserFriendsAsync,
   CreateRoomAsync,
   FindGroupsForUserAsync: FindPreviewGroupsForUserAsync,
+  GetUsersByUsernamesAsync
 };
