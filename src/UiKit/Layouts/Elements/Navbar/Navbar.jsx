@@ -1,17 +1,14 @@
 import {Line} from 'UiKit/Layouts/Line/Line'
 import './Navbar.css'
-
-import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { EmitLogout } from 'State/socket'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
-  const dispatch = useDispatch();
   const toggle = useSelector((store)=> store.toggle);
+  const socket = useSelector((store)=> store.socket.socket);
 
   const HandleLogOut = ()=>{
-    dispatch(EmitLogout());
+    socket.disconnect();
   }
   if(!toggle.chatState)
   {

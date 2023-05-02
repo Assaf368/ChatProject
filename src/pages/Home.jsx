@@ -7,19 +7,21 @@ import { Menu } from "UiKit/Layouts/Elements/Menu/Menu";
 import { AddFriend } from "Components/AddFriend/AddFriend";
 import { useDispatch, useSelector } from "react-redux";
 import { SetUserId, SetUserName } from "State/userDetails";
-import { EmitLogin, SetSocketConnection } from "State/socket";
 import { PickFriends } from "Components/PickFriends/PickFriends";
 import { SetChatState } from "State/toggle";
+import { SetSocketConnection } from "State/socket";
+import io from "socket.io-client";
+
 
 export const Home = () => {
   const toggle = useSelector((store) => store.toggle);
-  const userDetails = useSelector((store)=> store.userDetails);
-  const socket = useSelector((store)=> store.socket);
+  const userDetails = useSelector((store) => store.userDetails);
+  // const socket = useSelector((store) => store.socket.socket);
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   const [token] = useState(sessionStorage.getItem("token"));
+  
   useEffect(() => {
-    console.log("trying api");
     axios
       .get("/home", {
         headers: {
@@ -28,12 +30,13 @@ export const Home = () => {
       })
       .then((res) => {
         if (res.data.success === true) {
+          const socket = io("http://localhost:5000");
+          dispatch(SetSocketConnection(socket));
           setAuth(true);
-          dispatch(SetSocketConnection());
           dispatch(SetChatState(true));
           dispatch(SetUserName(res.data.username));
           dispatch(SetUserId(res.data.id));
-          dispatch(EmitLogin({username: res.data.username}));
+          socket.emit("login", { username: res.data.username });
         }
       });
   }, [token]);

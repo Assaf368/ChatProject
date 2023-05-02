@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Menu.css";
 import { useDispatch, useSelector } from "react-redux";
-import { OnReceiveInvitation } from "State/socket";
 import { SwichAddFriendState } from "State/toggle";
 import { InviteConfirmation } from "Components/InviteConfirmation/InviteConfirmation";
 import produce from "immer";
@@ -11,6 +10,7 @@ export const Menu = () => {
   const dispatch = useDispatch();
   const [requests, SetRequests] = useState([]);
   const userDetails = useSelector((store) => store.userDetails);
+  const socket = useSelector((store)=> store.socket.socket);
 
   const handleReceiveInvitation = (username) => {
     SetRequests((requests) =>
@@ -26,9 +26,9 @@ export const Menu = () => {
     );
   };
 
-  useEffect(() => {
-    dispatch(OnReceiveInvitation(handleReceiveInvitation));
-  }, [dispatch]);
+  socket.off('receive_invitation').on("receive_invitation", (data) => {
+    handleReceiveInvitation(data)
+  });
 
   const handleSwich = () => {
     dispatch(SwichAddFriendState());

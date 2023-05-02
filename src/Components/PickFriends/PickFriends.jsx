@@ -10,7 +10,7 @@ import { EmitCreateRoom } from "State/socket";
 export const PickFriends = () => {
     const userDetails = useSelector((store) => store.userDetails);
     const toggle = useSelector((store) => store.toggle);
-    const dispatch = useDispatch();
+    const socket = useSelector((store)=> store.socket.socket);
     const [usernames, SetUsernames] = useState([]);
     const [showGroupComp, SetShowGroupComp] = useState(false);
     const state = toggle.pickFriendsState;
@@ -41,8 +41,12 @@ export const PickFriends = () => {
     const groupName = document.querySelector('#group-name-input').value;
     const desc = document.querySelector('#discription-input').value;
     const img = null;
-    // axios.post('/home/createroom',{usernames:usernames,roomName:groupName,desc:desc,img:img}).catch(err => console.log(err));
-    dispatch(EmitCreateRoom({usernames:usernames,roomName:groupName,desc:desc,img:img}));
+    socket.emit("create_room", {
+      usernames:usernames ,
+      roomName: groupName,
+      desc: desc,
+      img: img,
+    });
     SetShowGroupComp(false);
     SetUsernames([]);
   }

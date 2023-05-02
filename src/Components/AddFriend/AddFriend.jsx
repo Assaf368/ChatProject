@@ -3,14 +3,13 @@ import "./AddFriend.css";
 import { Invitation } from "Components/Invitation/Invitation";
 import ReactDOM from 'react-dom';
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { EmitSendInvitation } from "State/socket";
+import { useSelector } from "react-redux";
 
 
 
 export const AddFriend = () => {
   const userDetails = useSelector((store)=> store.userDetails);
-  const dispatch = useDispatch();
+  const socket = useSelector((store)=> store.socket.socket);
   const toggle = useSelector((store => store.toggle));
   const state = toggle.addFriendState;
   
@@ -43,7 +42,10 @@ export const AddFriend = () => {
   };
   const HandleSendInvitation = async () =>{
     const targetName = document.querySelector('.text').textContent;
-    dispatch(EmitSendInvitation({senderUsername: userDetails.username, targetUsername:targetName}));
+    socket.emit("send_invitation", {
+      senderUsername: userDetails.username,
+      targetUsername: targetName,
+    });
   }
   const clearField = () => {
     document.querySelector(".input-of-addFreind").value = "";

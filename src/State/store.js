@@ -9,6 +9,8 @@ const customizedMiddleware = getDefaultMiddleware({
     serializableCheck: false,immutableCheck: false,
   });
 
+ 
+
 
 const store = configureStore({
     reducer:{
@@ -17,7 +19,7 @@ const store = configureStore({
         userDetails: userDetailsReducer,
         onlineRooms: onlineRoomsReducer
     },
-    middleware: customizedMiddleware,
+    middleware: customizedMiddleware
     
 })
 

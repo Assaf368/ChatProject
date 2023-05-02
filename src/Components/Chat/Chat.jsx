@@ -5,7 +5,9 @@ import { SideBar } from 'Components/ChatParts/SideBar/SideBar'
 import './Chat.css'
 
 
+
 export const Chat = ({userName,chatRooms})=>{
+
     return(
         <div className='chat-container'>
             <div className='chat-card'>
