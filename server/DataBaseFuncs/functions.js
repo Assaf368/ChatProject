@@ -11,6 +11,7 @@ const GetUserAsync = async (username) => {
 };
 
 const SendInvitationAsync = async (senderId, targetId) => {
+  //cheking if already exist in db
   const friendInstance = await FriendshipRequest.findOne({
     sender: senderId,
     target: targetId,
@@ -76,11 +77,26 @@ const FindUserFriendsAsync = async (username) => {
 };
 
 const _GetPreviewGroupsAsync = async (user) => {
-  const previewGroups = await Room.find({ members: { $in: [user.id] } }).select(
-    "_id name img"
-  );
+  const previewGroups = await Room.find({ 'members.id': user.id })
+  .select( "_id name img members").lean().then((rooms)=>{
+      return rooms.map((room)=>{
+        const member = room.members.find(member=> member.id.toString() === user.id );
+        return {
+          _id: room._id,
+          name: room.name,
+          img: room.img,
+          unreadMassagesCounter: member.unreadMassagesCounter          
+        }
+      })
+    })
+
   return previewGroups;
 };
+
+const _GetGroupsAsync = async(user)=>{
+  const groups = await Room.find({'members.id': user.id });
+  return groups;
+}
 
 const FindPreviewGroupsForUserAsync = async (username) => {
   const user = await GetUserAsync(username);
@@ -91,20 +107,51 @@ const FindPreviewGroupsForUserAsync = async (username) => {
   return previewGroups;
 };
 
+const FindGroupsForUserAsync = async(username)=>{
+  const user = await GetUserAsync(username);
+  let groups = null;
+  if (user) {
+    groups = await _GetGroupsAsync(user);
+  } 
+  return groups;
+}
+
 
 const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
   const nowTime = new Date();
-  const ids = users.map((user) => user.id);
+  const members = users.map((user) =>{
+    return{id:user.id, unreadMassagesCounter:0}  
+  } );
   const room = new Room({
-    members: ids,
+    members: members,
     name: roomName,
     description: desc,
     img: img,
     date: nowTime,
     massages: null,
+    unreadMassagesCounter: 0
+
   });
   await room.save();
   return room;
+}
+
+const ResetUnreadMassagesCounterAsync = async(roomId,userId)=>{
+  const room = await Room.findById(roomId);
+  const member = room.members.find(member=> member.id.toString() === userId);
+  member.unreadMassagesCounter = 0;
+  await room.save();
+}
+
+const UpdateUnreadMassagesCounterAsync = async(roomId ,userId, count)=>{
+  const room = await Room.findById(roomId);
+  const member = await room.members.find(member=> {return member.id.toString() === userId});
+  if(count !== undefined){
+    member.unreadMassagesCounter = count;
+  }else{
+    member.unreadMassagesCounter++;
+  }
+  await room.save();
 }
 
 const GetUsersByUsernamesAsync = async(usernames)=>{
@@ -114,16 +161,20 @@ const GetUsersByUsernamesAsync = async(usernames)=>{
    return await Promise.all(usersPromises);
 }
 
+
+
+const GetUsersByIdsAsync = async(ids)=>{
+  const usersPromises =  ids.map((id)=>{
+    return  User.findById(id);
+  })
+  return await Promise.all(usersPromises);
+}
+
 const CreateRoomAsync = async (usernames, roomName, desc, img) => {
   const users = await GetUsersByUsernamesAsync(usernames);
   if (users) {
-    const room = _SaveRoomToDbAsync(users, roomName,desc,img);
-    const resObj = {
-      roomId: room.id,
-      massages: room.massages,
-      date: room.date,
-    };
-    return resObj;
+    const room = await _SaveRoomToDbAsync(users, roomName,desc,img);
+    return room.id;
   }
 };
 module.exports = {
@@ -131,6 +182,10 @@ module.exports = {
   SendInvitationAsync,
   FindFriendsForUserAsync: FindUserFriendsAsync,
   CreateRoomAsync,
-  FindGroupsForUserAsync: FindPreviewGroupsForUserAsync,
-  GetUsersByUsernamesAsync
+  FindPreviewGroupsForUserAsync,
+  FindGroupsForUserAsync,
+  GetUsersByUsernamesAsync,
+  ResetUnreadMassagesCounterAsync,
+  UpdateUnreadMassagesCounterAsync,
+  GetUsersByIdsAsync
 };

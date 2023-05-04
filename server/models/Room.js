@@ -8,14 +8,22 @@ const roomSchema = new mongoose.Schema({
     maxlength: 30,
     minlength: 1
 },
-    members: {
-        type: [{
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-          required: true
-        }],
-        validate: [arrayLimit, ' exceeds the limit of 50']
-      },
+members: {
+  type: [{
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    unreadMassagesCounter: {
+      type: Number,
+      required: false,
+      min: 0,
+      default:0
+    }
+  }],
+  validate: [arrayLimit, ' exceeds the limit of 50']
+},
       massages: {
         type: [{
           type: mongoose.Schema.Types.ObjectId,

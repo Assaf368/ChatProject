@@ -5,6 +5,8 @@ const {
   FindByUserNameAsync,
   CreateRoomAsync,
   FindGroupsForUserAsync,
+  GetUsersByIdsAsync,
+  UpdateUnreadMassagesCounterAsync,
 } = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
 
@@ -18,7 +20,7 @@ module.exports = (server) => {
 
   io.on("connection", (socket) => {
     console.log(`user connected :${socket.id}`);
-
+    
     socket.on("login", async (data) => {
       const user = await FindByUserNameAsync(data.username);
       if (user) {
@@ -51,36 +53,37 @@ module.exports = (server) => {
 
     socket.on("create_room", async (data) => {
       const {usernames,roomName, desc, img} = data;
-      const resObj =  await CreateRoomAsync(usernames,roomName,desc,img);
-
-      const res = {
-        usernames:usernames,
-        roomName:roomName,
-        desc:desc,
-        img:img,
-        roomId:resObj.roomId,
-        massages: resObj.massages,
-        date: resObj.date
-      };
-
+      const roomId =  await CreateRoomAsync(usernames,roomName,desc,img);
       const userPromises = usernames.map((user) => {
         return FindByUserNameAsync(user);
       });
       const users = await Promise.all(userPromises);
-
       users.forEach((user) => {
         if (user.isOnline) {
           if(!user.socketId === socket.id){
-            socket.to(user.socketId).emit("create_room_client", res);
-            user.socketId.join(resObj.roomId);
+            user.socketId.join(roomId);
           }
           else{
-            io.to(user.socketId).emit("create_room_client", res);
-            socket.join(resObj.roomId);
+            socket.join(roomId);
           }
         }
       });
     });
+
+    socket.on("send_massage", async (data) => {
+      const { roomId,members} = data;
+      const ids = members.map((member)=> {return member.id});
+      const users = await GetUsersByIdsAsync(ids); 
+      users.forEach(async(user)=>{
+        if(user.isOnline){
+          io.to(roomId).emit('receive_message', data);
+        }else{
+          await UpdateUnreadMassagesCounterAsync(roomId, user.id);
+        }
+      })
+    });
+
+
 
     socket.on("logout", async (data) => {
       const user = await FindByUserNameAsync(data.username);

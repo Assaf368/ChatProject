@@ -7,7 +7,7 @@ const Friend = require("../models/Friend");
 const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
-const { FindByUserNameAsync, FindFriendsForUserAsync, FindGroupsForUserAsync } = require("../DataBaseFuncs/functions");
+const { FindByUserNameAsync, FindFriendsForUserAsync, FindGroupsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/functions");
 
 
 
@@ -108,12 +108,17 @@ router.post('/api/home/rejected', async (req,res)=>{
    res.sendStatus(200);
 });
 
-// router.post('/api/home/createroom', async(req,res)=>{
-//   const {usernames,roomName, desc, img} = req.body;
-//   await CreateRoomAsync(usernames,roomName,desc,img);
-//   res.sendStatus(200);
-// })
+router.post('/api/home/resetUnreadMassagesCounter', async(req,res)=>{
+  const {roomId,userId} = req.body.params;
+  await ResetUnreadMassagesCounterAsync(roomId,userId);
+  res.sendStatus(200);
+})
 
+router.post('/api/home/updateUnreadMassagesCounter', async(req,res)=>{
+  const {roomId,userId, count} = req.body;
+  await UpdateUnreadMassagesCounterAsync(roomId,userId,count);
+  res.sendStatus(200);
+})
 
 router.get("/api/home", authenticateToken, async (req, res) => {
   const authHeader = req.headers["authorization"];
@@ -133,7 +138,7 @@ router.get("/api/home", authenticateToken, async (req, res) => {
 router.get('/api/home/friendsdata',async(req,res) =>{
   const userName = req.query.username;
   const friends = await FindFriendsForUserAsync(userName);
-  const roomsForShow = await FindGroupsForUserAsync(userName);
+  const roomsForShow = await FindPreviewGroupsForUserAsync(userName);
   const data = {
     friends:friends,
     roomsForShow:roomsForShow
@@ -143,7 +148,7 @@ router.get('/api/home/friendsdata',async(req,res) =>{
 
 router.get('/api/home/getfullchat', async(req,res)=>{
   const roomId = req.query.roomId;
-  const chat = await Room.findById(roomId);
+  const chat = await Room.findById(roomId).populate('members massages');
   const data = {
     chat : chat
   }

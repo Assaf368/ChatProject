@@ -16,11 +16,14 @@ export const WinChat = ({ id }) => {
   }
 
   const HandleSendMassage = ()=>{
-    const text = document.querySelector('.text-massage-input').value;
+    const inputText = document.querySelector('.text-massage-input');
+    const text = inputText.value;
+    inputText.value = '';
     if(text !== ''){
       socket.emit("send_massage", {
         text:text ,
-        roomId:selectedChat._id
+        roomId:selectedChat._id,
+        members: selectedChat.members
       });
     }
   }
@@ -48,9 +51,9 @@ export const WinChat = ({ id }) => {
           </Between>
         </div>
         <div className="massages-card">
-          {selectedChat.massages.map(massage =>{
+          {selectedChat.massages? selectedChat.massages.map(massage =>{
             return <Massage name={massage.name} img={members.find(member => member.username === massage.name).img} text={massage.text}/>
-          })}
+          }): null }
         </div>
   
         <div className="input-bar-container">
