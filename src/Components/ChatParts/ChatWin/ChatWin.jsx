@@ -2,18 +2,16 @@ import { Between } from "UiKit/Layouts/Line/Line";
 import { Massage } from "../massage/Massage";
 import "./ChatWin.css";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { MyMassage } from "../MyMassage/MyMassage";
 
 
 export const WinChat = ({ id }) => {
-
-  const selectedChat = useSelector(store => store.onlineRooms.selectedChat);
+  const selectedChatId = useSelector((store)=> store.onlineRooms.selectedChatId);
+  const selectedChat = useSelector(store => store.onlineRooms.chats.find(chat=> chat._id === store.onlineRooms.selectedChatId));
   const socket = useSelector((store)=> store.socket.socket);
-  let members = null;
-  if(selectedChat !== null){
-     members = selectedChat.members.map(member =>{
-      return {username: member.userName, img: member.image};
-     })
-  }
+  const userDetails = useSelector((store)=> store.userDetails);
+
 
   const HandleSendMassage = ()=>{
     const inputText = document.querySelector('.text-massage-input');
@@ -23,10 +21,25 @@ export const WinChat = ({ id }) => {
       socket.emit("send_massage", {
         text:text ,
         roomId:selectedChat._id,
-        members: selectedChat.members
+        members: selectedChat.members,
+        senderId: userDetails.id
       });
     }
   }
+
+  const HandleKeyDown = (event)=>{
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      HandleSendMassage();
+    }
+  }
+
+  useEffect(()=>{
+    const massagesDiv = document.querySelector('.massages-card');
+    if(massagesDiv){
+      massagesDiv.scrollTop = massagesDiv.scrollHeight;
+    }
+  })
   
   if(selectedChat){
     return (
@@ -52,13 +65,17 @@ export const WinChat = ({ id }) => {
         </div>
         <div className="massages-card">
           {selectedChat.massages? selectedChat.massages.map(massage =>{
-            return <Massage name={massage.name} img={members.find(member => member.username === massage.name).img} text={massage.text}/>
+            if(massage.name !== userDetails.username){
+              return <Massage name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/>
+            }else{
+              return <MyMassage text={massage.text} date={massage.date} />
+            }
           }): null }
         </div>
   
         <div className="input-bar-container">
           <div className="input-container">
-            <input placeholder="type..." className="text-massage-input" type="text" />
+            <input onKeyDown={HandleKeyDown} placeholder="type..." className="text-massage-input" type="text" />
           </div>
           <div className="send-btn-and-icons-container">
             <img
@@ -83,7 +100,6 @@ export const WinChat = ({ id }) => {
       <div className="non-selcted-room-view">
         Select room and start chating!
       </div>
-
     )
   }
   

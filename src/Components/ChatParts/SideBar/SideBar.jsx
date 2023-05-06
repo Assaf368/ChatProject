@@ -6,14 +6,14 @@ import "./SideBar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { SetFriends } from "State/userDetails";
 import { SwichPickFriendsState } from "State/toggle";
-import {  SetSelectedChat } from "State/onlineRooms";
+import {  AddChatToRedux, AddMassageToChat, SetSelectedChatId } from "State/onlineRooms";
 
 export const SideBar = ({ id, userName }) => {
   const dispatch = useDispatch();
   const [clientRooms, SetClientRooms] = useState([]);
   const[unreadCounts, SetUnreadCounts] = useState([]);
-  const selectedChat = useSelector((store)=> store.onlineRooms.selectedChat);
   let previewChatsRef = useRef([]);
+  let selectedId = useRef(null);
 
   const socket = useSelector((store) => store.socket.socket);
 
@@ -22,14 +22,16 @@ export const SideBar = ({ id, userName }) => {
   };
 
   const HandleRoomClick = (roomId) => {
-    const selectedChatId = roomId;
-    SetUserBlockUnreadMassagesCounter(roomId,0);
+
+    SetUserUnreadMassagesCounter(roomId,0);
     let selected = null;
     axios
-      .get("/home/getfullchat", { params: { roomId: selectedChatId } })
+      .get("/home/getfullchat", { params: { roomId: roomId } })
       .then((res) => {
         selected = res.data.chat;
-        dispatch(SetSelectedChat({ selectedChat: selected }));
+        dispatch(AddChatToRedux(selected));
+        dispatch(SetSelectedChatId(selected._id));
+        selectedId.current = selected._id;
       });
   };
   useEffect(() => {
@@ -73,8 +75,8 @@ export const SideBar = ({ id, userName }) => {
 
 
 
-  const SetUserBlockUnreadMassagesCounter = (roomId,newCount)=>{
-    if( selectedChat === null ||selectedChat._id !== roomId){
+  const SetUserUnreadMassagesCounter = (roomId,newCount)=>{
+    if( selectedId.current === null ||selectedId.current !== roomId){
       const index = unreadCounts.findIndex((count) => count.roomId === roomId);
       const updatedCounts = [...unreadCounts];
       if(newCount !== 0){
@@ -87,8 +89,9 @@ export const SideBar = ({ id, userName }) => {
   }
 
   socket.off("receive_message").on("receive_message", (data) => {
-    const { roomId } = data;
-    SetUserBlockUnreadMassagesCounter(roomId,1);
+    const { roomId,text,senderId,username } = data;
+    SetUserUnreadMassagesCounter(roomId,1);
+    dispatch(AddMassageToChat({text: text, senderId: senderId, roomId:roomId, username:username}));
   });
 
   return (

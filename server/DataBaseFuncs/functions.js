@@ -2,6 +2,7 @@ const { states } = require("../Enums/enums");
 const FriendshipRequest = require("../models/Friend");
 const User = require("../models/User");
 const Room = require("../models/Room");
+const Massage = require("../models/Massage");
 
 const GetUserAsync = async (username) => {
   const user = await User.findOne({ userName: username }).catch((err) =>
@@ -120,7 +121,7 @@ const FindGroupsForUserAsync = async(username)=>{
 const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
   const nowTime = new Date();
   const members = users.map((user) =>{
-    return{id:user.id, unreadMassagesCounter:0}  
+    return{id:user.id,username: user.userName, unreadMassagesCounter:0}  
   } );
   const room = new Room({
     members: members,
@@ -128,9 +129,8 @@ const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
     description: desc,
     img: img,
     date: nowTime,
-    massages: null,
+    massages: [],
     unreadMassagesCounter: 0
-
   });
   await room.save();
   return room;
@@ -138,20 +138,28 @@ const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
 
 const ResetUnreadMassagesCounterAsync = async(roomId,userId)=>{
   const room = await Room.findById(roomId);
-  const member = room.members.find(member=> member.id.toString() === userId);
-  member.unreadMassagesCounter = 0;
-  await room.save();
+  if(room){
+    const member = room.members.find(member=> member.id.toString() === userId);
+    if(member){
+      member.unreadMassagesCounter = 0;
+      await room.save();
+    }
+  }
 }
 
 const UpdateUnreadMassagesCounterAsync = async(roomId ,userId, count)=>{
   const room = await Room.findById(roomId);
-  const member = await room.members.find(member=> {return member.id.toString() === userId});
-  if(count !== undefined){
-    member.unreadMassagesCounter = count;
-  }else{
-    member.unreadMassagesCounter++;
+  if(room){
+    const member = await room.members.find(member=> {return member.id.toString() === userId});
+    if(member){
+      if(count !== undefined){
+        member.unreadMassagesCounter = count;
+      }else{
+        member.unreadMassagesCounter++;
+      }
+      await room.save();
+    }
   }
-  await room.save();
 }
 
 const GetUsersByUsernamesAsync = async(usernames)=>{
@@ -161,7 +169,21 @@ const GetUsersByUsernamesAsync = async(usernames)=>{
    return await Promise.all(usersPromises);
 }
 
-
+const UpdateMassageToDbAsync = async(text , targetRoom, senderUser)=>{
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false }).toString();
+  const massage = new Massage({
+    text: text,
+    date: time,
+    name: senderUser.userName,
+    sender: senderUser.id,
+    target: targetRoom
+  });
+  await massage.save();
+  const room = await Room.findById(targetRoom);
+  room.massages.push(massage.id);
+  await room.save();
+}
 
 const GetUsersByIdsAsync = async(ids)=>{
   const usersPromises =  ids.map((id)=>{
@@ -187,5 +209,6 @@ module.exports = {
   GetUsersByUsernamesAsync,
   ResetUnreadMassagesCounterAsync,
   UpdateUnreadMassagesCounterAsync,
-  GetUsersByIdsAsync
+  GetUsersByIdsAsync,
+  UpdateMassageToDbAsync
 };

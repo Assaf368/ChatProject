@@ -7,7 +7,7 @@ const Friend = require("../models/Friend");
 const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
-const { FindByUserNameAsync, FindFriendsForUserAsync, FindGroupsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/functions");
+const { FindByUserNameAsync, FindFriendsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/functions");
 
 
 

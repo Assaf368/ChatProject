@@ -38,10 +38,9 @@
   width: 30px;
 }
 
-.massages-card {
+.massages-card  {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   overflow-y: scroll;
   flex: 7;
   background-color: #ddddf7;

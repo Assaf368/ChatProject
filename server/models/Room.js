@@ -15,6 +15,10 @@ members: {
       ref: 'User',
       required: true
     },
+    username: {
+      type: String,
+      required: true,
+    },
     unreadMassagesCounter: {
       type: Number,
       required: false,

@@ -1,5 +1,4 @@
 const { Server } = require("socket.io");
-const { use } = require("./handler");
 const {
   SendInvitationAsync,
   FindByUserNameAsync,
@@ -7,6 +6,7 @@ const {
   FindGroupsForUserAsync,
   GetUsersByIdsAsync,
   UpdateUnreadMassagesCounterAsync,
+  UpdateMassageToDbAsync,
 } = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
 
@@ -20,7 +20,7 @@ module.exports = (server) => {
 
   io.on("connection", (socket) => {
     console.log(`user connected :${socket.id}`);
-    
+
     socket.on("login", async (data) => {
       const user = await FindByUserNameAsync(data.username);
       if (user) {
@@ -71,16 +71,23 @@ module.exports = (server) => {
     });
 
     socket.on("send_massage", async (data) => {
-      const { roomId,members} = data;
+      const { roomId,members,text,senderId} = data;
       const ids = members.map((member)=> {return member.id});
       const users = await GetUsersByIdsAsync(ids); 
+      const senderUser = await User.findById(senderId);
+      const resData = {
+        roomId:roomId,
+        text:text,
+        senderId:senderId,
+        username: senderUser.userName
+      }
+      io.to(roomId).emit('receive_message', resData);
       users.forEach(async(user)=>{
-        if(user.isOnline){
-          io.to(roomId).emit('receive_message', data);
-        }else{
+        if(!user.isOnline){
           await UpdateUnreadMassagesCounterAsync(roomId, user.id);
         }
       })
+      await UpdateMassageToDbAsync(text,roomId, senderUser);
     });
 
 
