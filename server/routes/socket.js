@@ -10,6 +10,7 @@ const {
   AddInvitationToDbAsync,
 } = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
+const { states } = require("../Enums/enums");
 
 
 // Export the function that creates the io object
@@ -40,7 +41,7 @@ module.exports = (server) => {
       const targetUser = await GetUserAsync(data.targetUsername);
       const senderUser = await GetUserAsync(data.senderUsername);
       const frienshipStatus = await CheckFriendshipStatusAsync(senderUser.id, targetUser.id);
-      if(!frienshipStatus){
+      if(frienshipStatus === false || frienshipStatus === states.rejected){
         if (targetUser && senderUser) {
           if (targetUser.isOnline) {
             socket

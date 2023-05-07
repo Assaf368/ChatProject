@@ -7,7 +7,7 @@ const Friend = require("../models/Friend");
 const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
-const { FindByUserNameAsync, FindFriendsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync } = require("../DataBaseFuncs/functions");
+const { FindByUserNameAsync, FindFriendsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync } = require("../DataBaseFuncs/functions");
 
 
 
@@ -159,25 +159,40 @@ router.get('/api/home/getfullchat', async(req,res)=>{
 
 
 router.get("/api/findOne", async (req,res) =>{
-  const userName = req.query.username;
-  const user = await User.findOne({
-    userName:userName,
-  }).catch(err => res.send(err));
-  if(!user)
+  const {username, senderId} = req.query;
+  const targetUser = await GetUserAsync(username);
+  if(!targetUser)
   {
     res.json({
       username:null,
       massage: "couldnt find one!"
     });
+    return res.status(200);
   }
-  else
+  let friendshipStatus = await CheckFriendshipStatusAsync(senderId,targetUser.id);
+  if(friendshipStatus === states.accepted){
+    res.json({
+      username:targetUser.userName,
+        massage: "already friends!"
+    })
+    return res.status(200);
+  }if(friendshipStatus === states.waiting){
+    res.json({
+      username:targetUser.userName,
+        massage: "still waiting"
+    })
+    return res.status(200);
+  }
+  if(friendshipStatus === false || friendshipStatus === states.rejected)
   {
     res.json({
-      username:user.userName,
-      id: user.id,
+      username:targetUser.userName,
       massage: "success!"
     });
+    return res.status(200);
   }
+  
+  
 });
 
 
