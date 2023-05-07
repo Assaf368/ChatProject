@@ -40,13 +40,15 @@ export const WinChat = ({ id }) => {
       massagesDiv.scrollTop = massagesDiv.scrollHeight;
     }
   })
+
+ 
   
   if(selectedChat){
     return (
       <div id={id}>
         <div className="chat-info">
           <Between>
-            <span className="info-element">{selectedChat.name}</span>
+            <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
             <div className="chat-icons">
               <img
                 className="info-element img-icon"

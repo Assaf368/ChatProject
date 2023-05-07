@@ -4,9 +4,10 @@ const Massage = require('./Massage');
 const roomSchema = new mongoose.Schema({
   name:{
     type:String,
-    required:true,
+    required:false,
     maxlength: 30,
-    minlength: 1
+    minlength: 1,
+    default: null
 },
 members: {
   type: [{

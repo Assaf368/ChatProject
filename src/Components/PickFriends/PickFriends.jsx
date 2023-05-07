@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { CreateGroup } from "Components/CreateGroup/CreateGroup";
 import { EmitCreateRoom } from "State/socket";
+import { SwichPickFriendsState } from "State/toggle";
 
 export const PickFriends = () => {
+  const dispatch = useDispatch(); 
     const userDetails = useSelector((store) => store.userDetails);
     const toggle = useSelector((store) => store.toggle);
     const socket = useSelector((store)=> store.socket.socket);
@@ -28,7 +30,7 @@ export const PickFriends = () => {
   }
 
   const HandleCreateClick = ()=>{
-    if(usernames.length === 1)
+    if(usernames.length === 2)
     {
       HandleCreatePrivateChat();
     }
@@ -48,11 +50,16 @@ export const PickFriends = () => {
       img: img,
     });
     SetShowGroupComp(false);
+    dispatch(SwichPickFriendsState());
     SetUsernames([]);
   }
   
   const HandleCreatePrivateChat = ()=>{
-      
+      socket.emit("create_room", {
+        usernames:usernames ,
+      });
+      dispatch(SwichPickFriendsState());
+      SetUsernames([]);
   }
 
 

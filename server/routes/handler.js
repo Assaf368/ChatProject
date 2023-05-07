@@ -68,7 +68,7 @@ router.post("/api/login", async (req, res) => {
           iat: now,
         };
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: 900,
+          expiresIn: 240 * 60,
         });
 
         res.json({

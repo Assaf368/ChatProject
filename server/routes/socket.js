@@ -8,6 +8,7 @@ const {
   GetUserAsync,
   CheckFriendshipStatusAsync,
   AddInvitationToDbAsync,
+  CreatePrivateRoomAsync,
 } = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
 const { states } = require("../Enums/enums");
@@ -58,7 +59,12 @@ module.exports = (server) => {
 
     socket.on("create_room", async (data) => {
       const {usernames,roomName, desc, img} = data;
-      const roomId =  await CreateRoomAsync(usernames,roomName,desc,img);
+      let roomId = null
+      if(usernames.length !== 2){
+        roomId =  await CreateRoomAsync(usernames,roomName,desc,img);
+      }else{
+        roomId = await CreatePrivateRoomAsync(usernames,roomName);
+      }
       const userPromises = usernames.map((user) => {
         return GetUserAsync(user);
       });

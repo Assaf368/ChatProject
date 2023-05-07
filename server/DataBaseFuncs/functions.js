@@ -116,10 +116,19 @@ const _GetPreviewGroupsAsync = async (user) => {
   .select( "_id name img members").lean().then((rooms)=>{
       return rooms.map((room)=>{
         const member = room.members.find(member=> member.id.toString() === user.id );
+        let roomName = null;
+        let img = null;
+        if(room.name === null){
+          roomName = room.members.find(member => member.username !== user.userName).username;
+          img = room.members.find(member => member.username !== user.userName).image;
+        }else{
+          roomName = room.name;
+          img = room.img
+        }
         return {
           _id: room._id,
-          name: room.name,
-          img: room.img,
+          name: roomName,
+          img: img,
           unreadMassagesCounter: member.unreadMassagesCounter          
         }
       })
@@ -233,6 +242,18 @@ const CreateRoomAsync = async (usernames, roomName, desc, img) => {
     return room.id;
   }
 };
+
+const CreatePrivateRoomAsync = async(usernames,roomName)=>{
+  const users = await GetUsersByUsernamesAsync(usernames);
+  const img = null
+  const desc = null
+  if(users){
+    const room = await _SaveRoomToDbAsync(users, roomName,desc,img);
+    return room.id;
+  }
+}
+
+
 module.exports = {
   GetUserAsync,
   AddInvitationToDbAsync,
@@ -246,5 +267,6 @@ module.exports = {
   GetUsersByIdsAsync,
   UpdateMassageToDbAsync,
   GetUserInvitationsAsync,
-  CheckFriendshipStatusAsync
+  CheckFriendshipStatusAsync,
+  CreatePrivateRoomAsync
 };
