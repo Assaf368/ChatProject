@@ -173,7 +173,9 @@ router.get("/api/findOne", async (req,res) =>{
   if(friendshipStatus === states.accepted){
     res.json({
       username:targetUser.userName,
-        massage: "already friends!"
+        massage: "already friends!",
+        imgUrl: targetUser.image,
+        desc: targetUser.desc
     })
     return res.status(200);
   }if(friendshipStatus === states.waiting){
