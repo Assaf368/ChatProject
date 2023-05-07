@@ -1,30 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Menu.css";
 import { useDispatch, useSelector } from "react-redux";
 import { SwichAddFriendState } from "State/toggle";
 import { InviteConfirmation } from "Components/InviteConfirmation/InviteConfirmation";
-import produce from "immer";
 import axios from "axios";
 
 export const Menu = () => {
   const dispatch = useDispatch();
-  const [requests, SetRequests] = useState([]);
-  const userDetails = useSelector((store) => store.userDetails);
+  const invitations = useSelector((store) => store.userDetails.invitations);
+  const username = useSelector((store) => store.userDetails.username);
   const socket = useSelector((store)=> store.socket.socket);
+  const [requests, SetRequests] = useState([]);
 
   const handleReceiveInvitation = (username) => {
-    SetRequests((requests) =>
-      produce(requests, (draft) => {
-        draft.push(
-          <InviteConfirmation
-            handleRejection={HandleRejection}
-            handleAcception={HandleAcception}
-            username={username}
-          />
-        );
-      })
-    );
+    if(username){
+      const updatedArray = [...requests]
+      updatedArray.push(<InviteConfirmation handleAcception={HandleAcception} handleRejection={HandleRejection} username={username}/>)
+      SetRequests(updatedArray);
+    }
   };
+
+  useEffect(()=>{
+    if(invitations !== null){
+      invitations.forEach((invitation)=>{
+        handleReceiveInvitation(invitation.sender);
+      })
+    }
+  },[invitations])
 
   socket.off('receive_invitation').on("receive_invitation", (data) => {
     handleReceiveInvitation(data)
@@ -42,7 +44,7 @@ export const Menu = () => {
     axios
       .post("/home/accepted", {
         senderUsername: usernameVal,
-        targetUsername: userDetails.username,
+        targetUsername: username,
       })
       .then(() => {
         SetRequests((requests) => requests.filter((request) => request.props.username !== usernameVal));
@@ -59,7 +61,7 @@ export const Menu = () => {
     axios
       .post("/home/rejected", {
         senderUsername: usernameVal,
-        targetUsername: userDetails.username,
+        targetUsername: username,
       })
       .then(() => {
         SetRequests((requests) => requests.filter((request) => request.props.username !== usernameVal));
@@ -82,9 +84,7 @@ export const Menu = () => {
       <div className="req-container">
         <h4 className="header">Requests box</h4>
         <div className="requests">
-          {requests.map((request) => (
-            <div key={request.props.username}>{request}</div>
-          ))}
+          {requests? requests : null}
         </div>
       </div>
     </div>

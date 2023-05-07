@@ -11,21 +11,55 @@ const GetUserAsync = async (username) => {
   return user;
 };
 
-const SendInvitationAsync = async (senderId, targetId) => {
-  //cheking if already exist in db
+const CheckFriendshipStatusAsync = async(senderId,targetId)=>{
   const friendInstance = await FriendshipRequest.findOne({
-    sender: senderId,
-    target: targetId,
-  }).populate("sender target");
-  if (!friendInstance) {
+    $or: [
+      {
+        sender: senderId,
+        target: targetId,
+      },
+      {
+        sender: targetId,
+        target: senderId,
+      },
+    ],
+  })
+  if(friendInstance){
+    return friendInstance.isApproved;
+  }
+    return false;
+}
+
+const AddInvitationToDbAsync = async (senderId, targetId) => {
     const friend = new FriendshipRequest({
       sender: senderId,
       target: targetId,
       isApproved: states.waiting,
     });
     await friend.save();
-  }
 };
+
+const _GetPreviewInvitationsAsync = async(invitations)=>{
+  const usersPromises =  invitations.map((invitation)=>{
+    const sender =  User.findById(invitation.sender);
+    return sender
+  })
+  const users = await Promise.all(usersPromises);
+  return users.map((user)=>{
+      return {sender:user.userName}
+  } );
+
+}
+
+const GetUserInvitationsAsync = async(username) =>{
+  const user = await GetUserAsync(username);
+  const invitations = await FriendshipRequest.find({
+    target:user.id,
+    isApproved: states.waiting
+  })
+  const previewInvitations = await _GetPreviewInvitationsAsync(invitations);
+  return previewInvitations;
+}
 
 const _GetAcceptedFriendshipRequestsAsync = async (user) => {
   const friendshipRequests = await FriendshipRequest.find({
@@ -200,9 +234,9 @@ const CreateRoomAsync = async (usernames, roomName, desc, img) => {
   }
 };
 module.exports = {
-  FindByUserNameAsync: GetUserAsync,
-  SendInvitationAsync,
-  FindFriendsForUserAsync: FindUserFriendsAsync,
+  GetUserAsync,
+  AddInvitationToDbAsync,
+  FindUserFriendsAsync,
   CreateRoomAsync,
   FindPreviewGroupsForUserAsync,
   FindGroupsForUserAsync,
@@ -210,5 +244,7 @@ module.exports = {
   ResetUnreadMassagesCounterAsync,
   UpdateUnreadMassagesCounterAsync,
   GetUsersByIdsAsync,
-  UpdateMassageToDbAsync
+  UpdateMassageToDbAsync,
+  GetUserInvitationsAsync,
+  CheckFriendshipStatusAsync
 };

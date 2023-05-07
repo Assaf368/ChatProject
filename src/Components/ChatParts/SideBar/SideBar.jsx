@@ -4,7 +4,7 @@ import { Between } from "UiKit/Layouts/Line/Line";
 import { RoomBlock } from "../RoomBlock/RoomBlock";
 import "./SideBar.css";
 import { useDispatch, useSelector } from "react-redux";
-import { SetFriends } from "State/userDetails";
+import { SetFriends, SetInvitations } from "State/userDetails";
 import { SwichPickFriendsState } from "State/toggle";
 import {  AddChatToRedux, AddMassageToChat, SetSelectedChatId } from "State/onlineRooms";
 
@@ -41,9 +41,9 @@ export const SideBar = ({ id, userName }) => {
           username: userName,
         }})
       .then((res) => {
-        const friend = res.data.friends;
-        const roomsForShow = res.data.roomsForShow;
-        dispatch(SetFriends(friend));
+        const {friends,roomsForShow,invitations} = res.data;
+        dispatch(SetInvitations(invitations));
+        dispatch(SetFriends(friends));
         if (roomsForShow) {
           previewChatsRef.current = roomsForShow;
           let counts = roomsForShow.map((room) => {

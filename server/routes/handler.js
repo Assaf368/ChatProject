@@ -7,7 +7,7 @@ const Friend = require("../models/Friend");
 const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
-const { FindByUserNameAsync, FindFriendsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/functions");
+const { FindByUserNameAsync, FindFriendsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync } = require("../DataBaseFuncs/functions");
 
 
 
@@ -89,8 +89,8 @@ router.post("/api/login", async (req, res) => {
 router.post('/api/home/accepted', async (req,res)=>{
   const {senderUsername} = req.body; 
   const {targetUsername} = req.body; 
-  const sender = await FindByUserNameAsync(senderUsername);
-  const target = await FindByUserNameAsync(targetUsername);
+  const sender = await GetUserAsync(senderUsername);
+  const target = await GetUserAsync(targetUsername);
   const friendInstance = await Friend.findOne({sender:sender.id,target:target.id});
   friendInstance.isApproved = states.accepted;
    await friendInstance.save();
@@ -100,8 +100,8 @@ router.post('/api/home/accepted', async (req,res)=>{
 router.post('/api/home/rejected', async (req,res)=>{
   const {senderUsername} = req.body; 
   const {targetUsername} = req.body; 
-  const sender = await FindByUserNameAsync(senderUsername);
-  const target = await FindByUserNameAsync(targetUsername);
+  const sender = await GetUserAsync(senderUsername);
+  const target = await GetUserAsync(targetUsername);
   const friendInstance = await Friend.findOne({sender:sender.id,target:target.id});
   friendInstance.isApproved = states.rejected;
    await friendInstance.save();
@@ -137,11 +137,13 @@ router.get("/api/home", authenticateToken, async (req, res) => {
 
 router.get('/api/home/friendsdata',async(req,res) =>{
   const userName = req.query.username;
-  const friends = await FindFriendsForUserAsync(userName);
+  const friends = await FindUserFriendsAsync(userName);
   const roomsForShow = await FindPreviewGroupsForUserAsync(userName);
+  const invitations =  await GetUserInvitationsAsync(userName);
   const data = {
     friends:friends,
-    roomsForShow:roomsForShow
+    roomsForShow:roomsForShow,
+    invitations:invitations
   }
   res.send(data);
 });

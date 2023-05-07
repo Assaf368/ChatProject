@@ -1,12 +1,13 @@
 const { Server } = require("socket.io");
 const {
-  SendInvitationAsync,
-  FindByUserNameAsync,
   CreateRoomAsync,
   FindGroupsForUserAsync,
   GetUsersByIdsAsync,
   UpdateUnreadMassagesCounterAsync,
   UpdateMassageToDbAsync,
+  GetUserAsync,
+  CheckFriendshipStatusAsync,
+  AddInvitationToDbAsync,
 } = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
 
@@ -22,7 +23,7 @@ module.exports = (server) => {
     console.log(`user connected :${socket.id}`);
 
     socket.on("login", async (data) => {
-      const user = await FindByUserNameAsync(data.username);
+      const user = await GetUserAsync(data.username);
       if (user) {
         user.isOnline = true;
         user.socketId = socket.id;
@@ -36,26 +37,29 @@ module.exports = (server) => {
     });
 
     socket.on("send_invitation", async (data) => {
-      const targetUser = await FindByUserNameAsync(data.targetUsername);
-      const senderUser = await FindByUserNameAsync(data.senderUsername);
-
-      if (targetUser && senderUser) {
-        if (targetUser.isOnline) {
-          socket
-            .to(targetUser.socketId)
-            .emit("receive_invitation", data.senderUsername);
-          await SendInvitationAsync(senderUser.id, targetUser.id);
-        } else {
-          await SendInvitationAsync(senderUser.id, targetUser.id);
+      const targetUser = await GetUserAsync(data.targetUsername);
+      const senderUser = await GetUserAsync(data.senderUsername);
+      const frienshipStatus = await CheckFriendshipStatusAsync(senderUser.id, targetUser.id);
+      if(!frienshipStatus){
+        if (targetUser && senderUser) {
+          if (targetUser.isOnline) {
+            socket
+              .to(targetUser.socketId)
+              .emit("receive_invitation", data.senderUsername);
+            await AddInvitationToDbAsync(senderUser.id, targetUser.id);
+          } else {
+            await AddInvitationToDbAsync(senderUser.id, targetUser.id);
+          }
         }
       }
+      
     });
 
     socket.on("create_room", async (data) => {
       const {usernames,roomName, desc, img} = data;
       const roomId =  await CreateRoomAsync(usernames,roomName,desc,img);
       const userPromises = usernames.map((user) => {
-        return FindByUserNameAsync(user);
+        return GetUserAsync(user);
       });
       const users = await Promise.all(userPromises);
       users.forEach((user) => {
@@ -93,7 +97,7 @@ module.exports = (server) => {
 
 
     socket.on("logout", async (data) => {
-      const user = await FindByUserNameAsync(data.username);
+      const user = await GetUserAsync(data.username);
       user.isOnline = false;
       user.socketId = null;
       await user.save();
