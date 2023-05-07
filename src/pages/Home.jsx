@@ -11,12 +11,12 @@ import { PickFriends } from "Components/PickFriends/PickFriends";
 import { SetChatState } from "State/toggle";
 import { SetSocketConnection } from "State/socket";
 import io from "socket.io-client";
+import { ViewProfile } from "Components/ViewProfile/ViewProfile";
 
 
 export const Home = () => {
   const toggle = useSelector((store) => store.toggle);
   const userDetails = useSelector((store) => store.userDetails);
-  // const socket = useSelector((store) => store.socket.socket);
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   const [token] = useState(sessionStorage.getItem("token"));
@@ -49,6 +49,7 @@ export const Home = () => {
         <Menu></Menu>
         <AddFriend state={toggle.addFriendState}></AddFriend>
         {toggle.pickFriendsState && <PickFriends></PickFriends>}
+        <ViewProfile state={toggle.viewProfileState}/>
       </>
     );
   } else {

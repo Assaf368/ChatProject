@@ -3,11 +3,14 @@ import "./AddFriend.css";
 import { Invitation } from "Components/Invitation/Invitation";
 import ReactDOM from 'react-dom';
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SetViewProfileState } from "State/toggle";
+import { SetViewProfileDetails } from "State/viewProfile";
 
 
 
 export const AddFriend = () => {
+  const dispatch = useDispatch();
   const userDetails = useSelector((store)=> store.userDetails);
   const socket = useSelector((store)=> store.socket.socket);
   const toggle = useSelector((store => store.toggle));
@@ -27,10 +30,10 @@ export const AddFriend = () => {
         },
       })
       .then((res) => {
-        const {username, massage} = res.data;
+        const {username, massage,imgUrl,desc} = res.data;
         if(massage === 'already friends!' || username === userDetails.username){
           ReactDOM.render(
-            <Invitation status={'View profile'} userName={username} />,
+            <Invitation onClick={() =>HandleViewProfile(username,imgUrl,desc)}  status={'View profile'} userName={username} />,
             resDiv
           );
           return
@@ -66,8 +69,9 @@ export const AddFriend = () => {
     const invitationBtn = document.querySelector('#invitation-btn')
     invitationBtn.textContent = 'Invitation sent!'
   }
-  const HandleViewProfile = ()=>{
-    
+  const HandleViewProfile = (username, imgUrl,desc)=>{
+    dispatch(SetViewProfileDetails({username:username,imgUrl:imgUrl, desc:desc}));
+    dispatch(SetViewProfileState(true));
   }
   const clearField = () => {
     document.querySelector(".input-of-addFreind").value = "";

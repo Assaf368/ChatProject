@@ -118,7 +118,7 @@ export const SideBar = ({ id, userName }) => {
         </Between>
       </div>
       <div className="search-bar">
-        <input type="text" placeholder="search for a friend..." />
+        <input type="text" placeholder="search for a chat..." />
         <button id="search-btn">
           {" "}
           <img

@@ -1,0 +1,49 @@
+.view-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background-color: #9a8d9f;
+  width: 30%;
+  height: 45%;
+  border-radius: 12px;
+  font-family:'Heebo', sans-serif;
+}
+.view-profile-exit-btn{
+    height: 20px;
+    width: 20px;
+    flex:1;
+    align-self: flex-end;
+    cursor: pointer;
+    
+}
+
+.view-profile-pic-container{
+    flex:7
+
+}
+
+.view-profile-img{
+    height: 120px;
+    width: 120px;
+}
+
+.view-profile-username-container{
+    flex:6;
+    font-size: 46px;
+    font-weight: bolder;
+    color: white;
+
+}
+
+.view-profile-status-container{
+    flex:6;
+    font-size: 20px;
+    font-weight:bold;
+    color: black;
+    
+
+}
+
+
