@@ -1,9 +1,10 @@
-import { Between } from "UiKit/Layouts/Line/Line";
+import { Between, Line } from "UiKit/Layouts/Line/Line";
 import { Massage } from "../massage/Massage";
 import "./ChatWin.css";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { MyMassage } from "../MyMassage/MyMassage";
+import { ImageUpload } from "UiKit/Layouts/Elements/ImageUpload/ImageUpload";
 
 
 export const WinChat = ({ id }) => {
@@ -48,7 +49,10 @@ export const WinChat = ({ id }) => {
       <div id={id}>
         <div className="chat-info">
           <Between>
-            <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
+            <Line>
+            <img src={selectedChat.img} alt="" />
+              <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
+            </Line>
             <div className="chat-icons">
               <img
                 className="info-element img-icon"

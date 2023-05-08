@@ -7,7 +7,24 @@ const Friend = require("../models/Friend");
 const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
-const { FindByUserNameAsync, FindFriendsForUserAsync, ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync } = require("../DataBaseFuncs/functions");
+const multer = require('multer');
+const path = require('path')
+const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync } = require("../DataBaseFuncs/functions");
+
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Set the upload folder path
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Set the filename to be the current date + file extension
+  }
+});
+ const upload = multer({ storage: storage });
+
+
+
 
 
 
@@ -108,6 +125,17 @@ router.post('/api/home/rejected', async (req,res)=>{
    res.sendStatus(200);
 });
 
+router.post('/api/home/createroom',upload.single('image'), async (req,res)=>{
+  const {usernames,groupName, desc} = req.body;
+  const usernamesArray = usernames.split(','); 
+  const img = req.file.path;
+      if(usernames.length !== 2){
+          await CreateRoomAsync(usernamesArray,groupName,desc,img);
+      }else{
+          await CreatePrivateRoomAsync(usernamesArray,groupName);
+      }
+});
+
 router.post('/api/home/resetUnreadMassagesCounter', async(req,res)=>{
   const {roomId,userId} = req.body.params;
   await ResetUnreadMassagesCounterAsync(roomId,userId);
@@ -139,6 +167,9 @@ router.get('/api/home/friendsdata',async(req,res) =>{
   const userName = req.query.username;
   const friends = await FindUserFriendsAsync(userName);
   const roomsForShow = await FindPreviewGroupsForUserAsync(userName);
+  roomsForShow.forEach((room)=>{
+    room.img = `http://localhost:5000/${room.img}`
+  })
   const invitations =  await GetUserInvitationsAsync(userName);
   const data = {
     friends:friends,
@@ -151,6 +182,7 @@ router.get('/api/home/friendsdata',async(req,res) =>{
 router.get('/api/home/getfullchat', async(req,res)=>{
   const roomId = req.query.roomId;
   const chat = await Room.findById(roomId).populate('members massages');
+  chat.img = `http://localhost:5000/${chat.img}`
   const data = {
     chat : chat
   }

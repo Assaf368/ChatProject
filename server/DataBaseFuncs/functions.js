@@ -239,7 +239,6 @@ const CreateRoomAsync = async (usernames, roomName, desc, img) => {
   const users = await GetUsersByUsernamesAsync(usernames);
   if (users) {
     const room = await _SaveRoomToDbAsync(users, roomName,desc,img);
-    return room.id;
   }
 };
 
@@ -249,7 +248,6 @@ const CreatePrivateRoomAsync = async(usernames,roomName)=>{
   const desc = null
   if(users){
     const room = await _SaveRoomToDbAsync(users, roomName,desc,img);
-    return room.id;
   }
 }
 

@@ -15,6 +15,7 @@ export const PickFriends = () => {
     const socket = useSelector((store)=> store.socket.socket);
     const [usernames, SetUsernames] = useState([]);
     const [showGroupComp, SetShowGroupComp] = useState(false);
+    const[image, SetImage] = useState(null);
     const state = toggle.pickFriendsState;
     const friendsArray = userDetails.friends;
     let friendSelectorElements = null;
@@ -42,13 +43,16 @@ export const PickFriends = () => {
   const HandleSubmitGroup = ()=>{
     const groupName = document.querySelector('#group-name-input').value;
     const desc = document.querySelector('#discription-input').value;
-    const img = null;
-    socket.emit("create_room", {
-      usernames:usernames ,
-      roomName: groupName,
-      desc: desc,
-      img: img,
-    });
+    const formData = new FormData();
+    formData.append('image',image);
+    formData.append('groupName',groupName);
+    formData.append('desc', desc);
+    formData.append('usernames',usernames)
+    axios.post('/home/createroom',formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
     SetShowGroupComp(false);
     dispatch(SwichPickFriendsState());
     SetUsernames([]);
@@ -65,7 +69,7 @@ export const PickFriends = () => {
 
   if(state && showGroupComp){
     return(
-      <CreateGroup onSubmit={HandleSubmitGroup}></CreateGroup>
+      <CreateGroup SetImage={SetImage} onSubmit={HandleSubmitGroup}></CreateGroup>
     )
   }
   if(state){

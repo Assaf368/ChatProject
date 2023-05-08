@@ -34,6 +34,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  background-color: #313856;
 }
 
 .submit-group-container {
@@ -81,5 +82,11 @@
     flex: 0.2; 
     width: 100%;
     justify-content: right;
+
+}
+
+.create-group-header{
+  font-size: 36px;
+  color: white;
 
 }

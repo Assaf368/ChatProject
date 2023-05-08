@@ -9,6 +9,7 @@ const http = require("http");
 
 
 
+
 mongoose.connect('mongodb://127.0.0.1/chatDb', {useNewUrlParser: true, useUnifiedTopology:true})
 .then(()=>{
     console.log("mongo connection is open!");
@@ -16,7 +17,6 @@ mongoose.connect('mongodb://127.0.0.1/chatDb', {useNewUrlParser: true, useUnifie
 .catch(err => {
     console.log(err);
 })
-
 
 
 app.use(cors({
@@ -29,6 +29,7 @@ app.options('/api/home', cors({
     methods: ['GET', 'POST']
   }));
 
+app.use('/uploads',express.static('uploads'));
 
 app.use('/', routesHandler);
 

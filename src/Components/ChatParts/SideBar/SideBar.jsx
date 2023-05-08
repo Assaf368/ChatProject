@@ -110,7 +110,7 @@ export const SideBar = ({ id, userName }) => {
           <div className="user-details-container">
             <img
               id="img"
-              src="https://static-hotsites.edufindme.com/tsw-events/46af4ebddab82f4e20774fac3bf892b98408bc82/static/img/hub/img/img-student-2.png"
+              src=""
               alt="user"
             />
             <div className="name-container">{userName}</div>

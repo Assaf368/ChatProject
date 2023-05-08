@@ -14,12 +14,14 @@ const User = require("../models/User");
 const { states } = require("../Enums/enums");
 
 
+
 // Export the function that creates the io object
 module.exports = (server) => {
   const io = new Server(server, {
     cors: "http://localhost:3000",
     methods: ["POST", "GET"],
   });
+
 
   io.on("connection", (socket) => {
     console.log(`user connected :${socket.id}`);
@@ -57,31 +59,8 @@ module.exports = (server) => {
       
     });
 
-    socket.on("create_room", async (data) => {
-      const {usernames,roomName, desc, img} = data;
-      let roomId = null
-      if(usernames.length !== 2){
-        roomId =  await CreateRoomAsync(usernames,roomName,desc,img);
-      }else{
-        roomId = await CreatePrivateRoomAsync(usernames,roomName);
-      }
-      const userPromises = usernames.map((user) => {
-        return GetUserAsync(user);
-      });
-      const users = await Promise.all(userPromises);
-      users.forEach((user) => {
-        if (user.isOnline) {
-          if(!user.socketId === socket.id){
-            user.socketId.join(roomId);
-          }
-          else{
-            socket.join(roomId);
-          }
-        }
-      });
-    });
 
-    socket.on("send_massage", async (data) => {
+  socket.on("send_massage", async (data) => {
       const { roomId,members,text,senderId} = data;
       const ids = members.map((member)=> {return member.id});
       const users = await GetUsersByIdsAsync(ids); 
