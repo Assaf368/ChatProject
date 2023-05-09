@@ -127,8 +127,14 @@ router.post('/api/home/rejected', async (req,res)=>{
 
 router.post('/api/home/createroom',upload.single('image'), async (req,res)=>{
   const {usernames,groupName, desc} = req.body;
-  const usernamesArray = usernames.split(','); 
-  const img = req.file.path;
+  let usernamesArray = null;
+  usernamesArray = usernames
+  if(!Array.isArray(usernames))
+    usernamesArray = usernames.split(','); 
+  let img = null;
+  if(req.file)
+    img = req.file.path;
+  
       if(usernames.length !== 2){
           await CreateRoomAsync(usernamesArray,groupName,desc,img);
       }else{
