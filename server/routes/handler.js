@@ -9,7 +9,7 @@ const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const path = require('path')
-const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync } = require("../DataBaseFuncs/functions");
+const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync } = require("../DataBaseFuncs/functions");
 
 
 
@@ -41,7 +41,6 @@ function authenticateToken(req, res, next) {
     if (err) {
       return res.sendStatus(403);
     }
-
     req.user = user;
     next();
   });
@@ -69,6 +68,19 @@ router.post("/api/register", async (req, res) => {
   }
 });
 
+router.post('/api/home/updateprofile',upload.single('image'), async(req,res)=>{
+  const{username,status} = req.body;
+  let img = null;
+  if(req.file){
+     img = req.file.path;
+  }
+  if(status !== ''){
+    await UpdateUserStatusAsync(username,status);
+  }
+  if(img){
+    await UpdateUserImgAsync(username, img);
+  }
+})
 
 router.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
@@ -82,6 +94,8 @@ router.post("/api/login", async (req, res) => {
         const payload = {
           userId: user.id,
           userName: user.userName,
+          status:user.status,
+          img:user.image,
           iat: now,
         };
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
@@ -130,7 +144,7 @@ router.post('/api/home/createroom',upload.single('image'), async (req,res)=>{
   let usernamesArray = null;
   usernamesArray = usernames
   if(!Array.isArray(usernames))
-    usernamesArray = usernames.split(','); 
+    usernamesArray = usernames.split(',');
   let img = null;
   if(req.file)
     img = req.file.path;
@@ -158,14 +172,14 @@ router.get("/api/home", authenticateToken, async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   const decodedToken = jwt.decode(token);
-  const username = decodedToken.userName;
-  const id = decodedToken.userId
-  
+  const user = await GetUserAsync(decodedToken.userName);
   res.json({
     success: true,
     message: " you'r fine!.",
-    username: username,
-    id: id
+    username: decodedToken.userName,
+    id: decodedToken.userId,
+    status: user.status,
+    img:user.image
   });
 });
 

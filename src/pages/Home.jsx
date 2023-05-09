@@ -6,12 +6,13 @@ import axios from "axios";
 import { Menu } from "UiKit/Layouts/Elements/Menu/Menu";
 import { AddFriend } from "Components/AddFriend/AddFriend";
 import { useDispatch, useSelector } from "react-redux";
-import { SetUserId, SetUserName } from "State/userDetails";
+import { SetUserDetails, SetUserId, SetUserName } from "State/userDetails";
 import { PickFriends } from "Components/PickFriends/PickFriends";
 import { SetChatState } from "State/toggle";
 import { SetSocketConnection } from "State/socket";
 import io from "socket.io-client";
 import { ViewProfile } from "Components/ViewProfile/ViewProfile";
+import { EditProfile } from "Components/EditProfile/EditProfile";
 
 
 export const Home = () => {
@@ -34,8 +35,7 @@ export const Home = () => {
           dispatch(SetSocketConnection(socket));
           setAuth(true);
           dispatch(SetChatState(true));
-          dispatch(SetUserName(res.data.username));
-          dispatch(SetUserId(res.data.id));
+          dispatch(SetUserDetails(res.data));
           socket.emit("login", { username: res.data.username });
         }
       });
@@ -50,6 +50,7 @@ export const Home = () => {
         <AddFriend state={toggle.addFriendState}></AddFriend>
         {toggle.pickFriendsState && <PickFriends></PickFriends>}
         <ViewProfile state={toggle.viewProfileState}/>
+        <EditProfile state={toggle.editProfileState}/>
       </>
     );
   } else {

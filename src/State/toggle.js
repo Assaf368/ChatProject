@@ -4,8 +4,8 @@ const initialState = {
     addFriendState: false,
     pickFriendsState : false,
     chatState : false,
-    viewProfileState:false
-    
+    viewProfileState:false,
+    editProfileState:false
 }
 
 export const toggleSlice = createSlice({
@@ -23,10 +23,12 @@ export const toggleSlice = createSlice({
         },
         SetViewProfileState:(state,action) =>{
             state.viewProfileState = action.payload;
+        },
+        SetEditProfileState:(state,action) =>{
+            state.editProfileState = action.payload;
         }
-        
     }
 })
 
-export const{SwichAddFriendState,SwichPickFriendsState,SetChatState,SetViewProfileState} = toggleSlice.actions;
+export const{SwichAddFriendState,SwichPickFriendsState,SetChatState,SetViewProfileState,SetEditProfileState} = toggleSlice.actions;
 export default toggleSlice.reducer;

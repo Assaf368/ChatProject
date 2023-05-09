@@ -3,6 +3,7 @@ const FriendshipRequest = require("../models/Friend");
 const User = require("../models/User");
 const Room = require("../models/Room");
 const Massage = require("../models/Massage");
+const fs =require('fs');
 
 const GetUserAsync = async (username) => {
   const user = await User.findOne({ userName: username }).catch((err) =>
@@ -176,7 +177,6 @@ const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
     unreadMassagesCounter: 0
   });
   await room.save();
-  return room;
 }
 
 const ResetUnreadMassagesCounterAsync = async(roomId,userId)=>{
@@ -235,10 +235,25 @@ const GetUsersByIdsAsync = async(ids)=>{
   return await Promise.all(usersPromises);
 }
 
+const UpdateUserStatusAsync = async(username,status)=>{
+  const user = await GetUserAsync(username);
+  user.status = status;
+  user.save();
+}
+
+const UpdateUserImgAsync = async(username,img)=>{
+  const user = await GetUserAsync(username);
+  if(user.img){
+    DeleteImgFromStorage(user.image);
+  }
+  user.image = img;
+  user.save();
+}
+
 const CreateRoomAsync = async (usernames, roomName, desc, img) => {
   const users = await GetUsersByUsernamesAsync(usernames);
   if (users) {
-    const room = await _SaveRoomToDbAsync(users, roomName,desc,img);
+     await _SaveRoomToDbAsync(users, roomName,desc,img);
   }
 };
 
@@ -247,9 +262,16 @@ const CreatePrivateRoomAsync = async(usernames,roomName)=>{
   const img = null
   const desc = null
   if(users){
-    const room = await _SaveRoomToDbAsync(users, roomName,desc,img);
+     await _SaveRoomToDbAsync(users, roomName,desc,img);
   }
 }
+
+const DeleteImgFromStorage =(path)=>[
+  fs.unlink(path,(err)=> {
+    console.log(err);
+  })
+]
+
 
 
 module.exports = {
@@ -266,5 +288,7 @@ module.exports = {
   UpdateMassageToDbAsync,
   GetUserInvitationsAsync,
   CheckFriendshipStatusAsync,
-  CreatePrivateRoomAsync
+  CreatePrivateRoomAsync,
+  UpdateUserStatusAsync,
+  UpdateUserImgAsync
 };

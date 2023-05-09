@@ -59,9 +59,9 @@ export const PickFriends = () => {
   }
   
   const HandleCreatePrivateChat = ()=>{
-      socket.emit("create_room", {
-        usernames:usernames ,
-      });
+    const formData = new FormData();
+    formData.append('usernames',usernames)
+    axios.post('/home/createroom', {usernames: usernames})
       dispatch(SwichPickFriendsState());
       SetUsernames([]);
   }

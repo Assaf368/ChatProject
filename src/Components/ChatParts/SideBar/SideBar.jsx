@@ -5,7 +5,7 @@ import { RoomBlock } from "../RoomBlock/RoomBlock";
 import "./SideBar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { SetFriends, SetInvitations } from "State/userDetails";
-import { SwichPickFriendsState } from "State/toggle";
+import { SetEditProfileState, SwichPickFriendsState } from "State/toggle";
 import {  AddChatToRedux, AddMassageToChat, SetSelectedChatId } from "State/onlineRooms";
 
 export const SideBar = ({ id, userName }) => {
@@ -14,8 +14,8 @@ export const SideBar = ({ id, userName }) => {
   const[unreadCounts, SetUnreadCounts] = useState([]);
   let previewChatsRef = useRef([]);
   let selectedId = useRef(null);
-
   const socket = useSelector((store) => store.socket.socket);
+  const userDetails = useSelector((store)=> store.userDetails);
 
   const HandleSwichPickFriendsState = () => {
     dispatch(SwichPickFriendsState());
@@ -108,9 +108,9 @@ export const SideBar = ({ id, userName }) => {
             />
           </div>
           <div className="user-details-container">
-            <img
+            <img onClick={() =>dispatch(SetEditProfileState(true))}
               id="img"
-              src=""
+              src={userDetails.img}
               alt="user"
             />
             <div className="name-container">{userName}</div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ImageUpload.css";
 import axios from "axios";
 
-export const ImageUpload = ({SetImage}) => {
+export const ImageUpload = ({SetImage,id}) => {
  
 
   const HandleImage = (event) => {
@@ -10,7 +10,7 @@ export const ImageUpload = ({SetImage}) => {
   };
 
   return (
-    <div className="image-upload-container">
+    <div id={id} className="image-upload-container">
       <input type="file"  id="file-input" onChange={HandleImage} />
     </div>
   );
