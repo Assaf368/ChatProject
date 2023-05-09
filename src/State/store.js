@@ -3,11 +3,14 @@ import toggleReducer from './toggle'
 import socketReducer from './socket'
 import userDetailsReducer from './userDetails'
 import onlineRoomsReducer from './onlineRooms'
+import viewProfileReducer from './viewProfile'
 import { Provider } from "react-redux";
 
 const customizedMiddleware = getDefaultMiddleware({
     serializableCheck: false,immutableCheck: false,
   });
+
+ 
 
 
 const store = configureStore({
@@ -15,9 +18,10 @@ const store = configureStore({
         toggle: toggleReducer,
         socket: socketReducer,
         userDetails: userDetailsReducer,
-        onlineRooms: onlineRoomsReducer
+        onlineRooms: onlineRoomsReducer,
+        viewProfile: viewProfileReducer
     },
-    middleware: customizedMiddleware,
+    middleware: customizedMiddleware
     
 })
 

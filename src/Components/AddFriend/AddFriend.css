@@ -22,7 +22,7 @@
 
 .search-btn-of-addFriend{
     width: 30%;
-    height: 40px;
+    height: 55px;
     margin: 14px;
     font-size: 20px;
     font-weight: bold;
@@ -32,4 +32,8 @@
 .input-of-addFreind{
     width: 70%;
     text-align: center;
+}
+
+.results-of-search{
+    height: 20%;
 }

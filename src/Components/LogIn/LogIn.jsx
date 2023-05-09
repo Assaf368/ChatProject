@@ -27,7 +27,6 @@ export const LogIn = () => {
     axios.post("/login", { username: usernameVal, password: passwordVal })
       .then((res) => {
         if (res.data.auth === true) {
-          console.log(res);
           sessionStorage.setItem("token", res.data.accessToken);
           navigate('/home');
         } else {

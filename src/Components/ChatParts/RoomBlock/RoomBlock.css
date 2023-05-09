@@ -40,5 +40,19 @@ img{
 
 .details-container{
     width: 80%;
+    display: flex;
+    margin-right: 10px;
+}
+
+.unread-massages-counter{
+    color: red;
+    font-weight: bolder;
+    display: flex;
+    background-color: #fff;
+    width: 7%;
+    height: 50%;
+    border-radius: 100px;
+    align-items: center;
+    justify-content: center;
 }
 

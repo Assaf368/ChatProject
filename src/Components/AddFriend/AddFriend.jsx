@@ -4,13 +4,15 @@ import { Invitation } from "Components/Invitation/Invitation";
 import ReactDOM from 'react-dom';
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { EmitSendInvitation } from "State/socket";
+import { SetViewProfileState } from "State/toggle";
+import { SetViewProfileDetails } from "State/viewProfile";
 
 
 
 export const AddFriend = () => {
-  const userDetails = useSelector((store)=> store.userDetails);
   const dispatch = useDispatch();
+  const userDetails = useSelector((store)=> store.userDetails);
+  const socket = useSelector((store)=> store.socket.socket);
   const toggle = useSelector((store => store.toggle));
   const state = toggle.addFriendState;
   
@@ -24,26 +26,52 @@ export const AddFriend = () => {
       .get("/findOne", {
         params: {
           username: inputVal,
+          senderId: userDetails.id
         },
       })
       .then((res) => {
-        const foundedUsername = res.data.username;
-        if (foundedUsername) {
+        const {username, massage,imgUrl,desc} = res.data;
+        if(massage === 'already friends!' || username === userDetails.username){
           ReactDOM.render(
-            <Invitation onClick={HandleSendInvitation}  userName={foundedUsername} />,
+            <Invitation onClick={() =>HandleViewProfile(username,imgUrl,desc)}  status={'View profile'} userName={username} />,
             resDiv
           );
-        } else {
+          return
+        }
+        if ( massage === 'success!') {
+          ReactDOM.render(
+            <Invitation status={'Send!'} onClick={HandleSendInvitation}  userName={username} />,
+            resDiv
+          );
+          return
+
+        } if(massage === 'couldnt find one!') {
           const textDiv = React.createElement('div', {}, 'No results!');
           ReactDOM.render(textDiv, resDiv);
           ReactDOM.render(textDiv,resDiv);
+          return
+        }if(massage === 'still waiting'){
+          ReactDOM.render(
+            <Invitation status={'Pending...'}   userName={username} />,
+            resDiv
+          );
+          return
         }
       })
       .catch((err) => console.log(err));
   };
   const HandleSendInvitation = async () =>{
     const targetName = document.querySelector('.text').textContent;
-    dispatch(EmitSendInvitation({senderUsername: userDetails.username, targetUsername:targetName}));
+    socket.emit("send_invitation", {
+      senderUsername: userDetails.username,
+      targetUsername: targetName,
+    });
+    const invitationBtn = document.querySelector('#invitation-btn')
+    invitationBtn.textContent = 'Invitation sent!'
+  }
+  const HandleViewProfile = (username, imgUrl,desc)=>{
+    dispatch(SetViewProfileDetails({username:username,imgUrl:imgUrl, desc:desc}));
+    dispatch(SetViewProfileState(true));
   }
   const clearField = () => {
     document.querySelector(".input-of-addFreind").value = "";

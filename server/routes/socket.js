@@ -1,12 +1,18 @@
 const { Server } = require("socket.io");
-const { use } = require("./handler");
 const {
-  SendInvitationAsync,
-  FindByUserNameAsync,
   CreateRoomAsync,
   FindGroupsForUserAsync,
+  GetUsersByIdsAsync,
+  UpdateUnreadMassagesCounterAsync,
+  UpdateMassageToDbAsync,
+  GetUserAsync,
+  CheckFriendshipStatusAsync,
+  AddInvitationToDbAsync,
+  CreatePrivateRoomAsync,
 } = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
+const { states } = require("../Enums/enums");
+
 
 
 // Export the function that creates the io object
@@ -16,11 +22,12 @@ module.exports = (server) => {
     methods: ["POST", "GET"],
   });
 
+
   io.on("connection", (socket) => {
     console.log(`user connected :${socket.id}`);
 
     socket.on("login", async (data) => {
-      const user = await FindByUserNameAsync(data.username);
+      const user = await GetUserAsync(data.username);
       if (user) {
         user.isOnline = true;
         user.socketId = socket.id;
@@ -34,56 +41,49 @@ module.exports = (server) => {
     });
 
     socket.on("send_invitation", async (data) => {
-      const targetUser = await FindByUserNameAsync(data.targetUsername);
-      const senderUser = await FindByUserNameAsync(data.senderUsername);
-
-      if (targetUser && senderUser) {
-        if (targetUser.isOnline) {
-          socket
-            .to(targetUser.socketId)
-            .emit("receive_invitation", data.senderUsername);
-          await SendInvitationAsync(senderUser.id, targetUser.id);
-        } else {
-          await SendInvitationAsync(senderUser.id, targetUser.id);
+      const targetUser = await GetUserAsync(data.targetUsername);
+      const senderUser = await GetUserAsync(data.senderUsername);
+      const frienshipStatus = await CheckFriendshipStatusAsync(senderUser.id, targetUser.id);
+      if(frienshipStatus === false || frienshipStatus === states.rejected){
+        if (targetUser && senderUser) {
+          if (targetUser.isOnline) {
+            socket
+              .to(targetUser.socketId)
+              .emit("receive_invitation", data.senderUsername);
+            await AddInvitationToDbAsync(senderUser.id, targetUser.id);
+          } else {
+            await AddInvitationToDbAsync(senderUser.id, targetUser.id);
+          }
         }
       }
+      
     });
 
-    socket.on("create_room", async (data) => {
-      const {usernames,roomName, desc, img} = data;
-      const resObj =  await CreateRoomAsync(usernames,roomName,desc,img);
 
-      const res = {
-        usernames:usernames,
-        roomName:roomName,
-        desc:desc,
-        img:img,
-        roomId:resObj.roomId,
-        massages: resObj.massages,
-        date: resObj.date
-      };
-
-      const userPromises = usernames.map((user) => {
-        return FindByUserNameAsync(user);
-      });
-      const users = await Promise.all(userPromises);
-
-      users.forEach((user) => {
-        if (user.isOnline) {
-          if(!user.socketId === socket.id){
-            socket.to(user.socketId).emit("create_room_client", res);
-            user.socketId.join(resObj.roomId);
-          }
-          else{
-            io.to(user.socketId).emit("create_room_client", res);
-            socket.join(resObj.roomId);
-          }
+  socket.on("send_massage", async (data) => {
+      const { roomId,members,text,senderId} = data;
+      const ids = members.map((member)=> {return member.id});
+      const users = await GetUsersByIdsAsync(ids); 
+      const senderUser = await User.findById(senderId);
+      const resData = {
+        roomId:roomId,
+        text:text,
+        senderId:senderId,
+        username: senderUser.userName
+      }
+      io.to(roomId).emit('receive_message', resData);
+      users.forEach(async(user)=>{
+        if(!user.isOnline){
+          await UpdateUnreadMassagesCounterAsync(roomId, user.id);
         }
-      });
+      })
+      await UpdateMassageToDbAsync(text,roomId, senderUser);
     });
+
+
 
     socket.on("logout", async (data) => {
-      const user = await FindByUserNameAsync(data.username);
+      const user = await GetUserAsync(data.username);
       user.isOnline = false;
       user.socketId = null;
       await user.save();
