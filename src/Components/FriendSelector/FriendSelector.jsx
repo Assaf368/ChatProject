@@ -1,25 +1,27 @@
 import "./FriendSelector.css";
 import produce from "immer";
 
-export const FriendSelector = ({ username, SetUsernames}) => {
+export const FriendSelector = ({ usernames, username, SetUsernames }) => {
   const HandleCheckboxDiv = (event) => {
-    const friendDiv = event.currentTarget;
-    const checkbox = friendDiv.querySelector("input");
-    if (event.target.className !== "checkbox") {
-      checkbox.checked = !checkbox.checked;
-    }
-    if (checkbox.checked) {
-      SetUsernames((usernames) =>
-        produce(usernames, (draft) => {
-          draft.push(username);
-        })
-      );
-    } else {
-      SetUsernames((usernames) =>
-        produce(usernames, (draft) => {
-          return draft.filter((name) => name !== username);
-        })
-      );
+    if (usernames.length < 50) {
+      const friendDiv = event.currentTarget;
+      const checkbox = friendDiv.querySelector("input");
+      if (event.target.className !== "checkbox") {
+        checkbox.checked = !checkbox.checked;
+      }
+      if (checkbox.checked) {
+        SetUsernames((usernames) =>
+          produce(usernames, (draft) => {
+            draft.push(username);
+          })
+        );
+      } else {
+        SetUsernames((usernames) =>
+          produce(usernames, (draft) => {
+            return draft.filter((name) => name !== username);
+          })
+        );
+      }
     }
   };
 

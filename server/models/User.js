@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required: [true, 'UserName cannot be blank!'],
         minlength: 3,
-        maxlength:10
+        maxlength:20
     },
     password:{
         type:String,
@@ -34,8 +34,8 @@ const userSchema = new mongoose.Schema({
     status:{
         type: String,
         required : false,
-        minlength: 1,
-        maxlength:40
+        minlength: 0,
+        maxlength:50
     }
 });
 

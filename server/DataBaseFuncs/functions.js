@@ -9,7 +9,10 @@ const GetUserAsync = async (username) => {
   const user = await User.findOne({ userName: username }).catch((err) =>
     console.log(err)
   );
-  return user;
+  if(user){
+    return user;
+  }
+  return false
 };
 
 const CheckFriendshipStatusAsync = async(senderId,targetId)=>{
@@ -257,6 +260,14 @@ const CreateRoomAsync = async (usernames, roomName, desc, img) => {
   }
 };
 
+const CheckIfUserExist = async(username)=>{
+  const res = await GetUserAsync(username);
+  if(res === false){
+    return false;
+  }
+  return true;
+}
+
 const CreatePrivateRoomAsync = async(usernames,roomName)=>{
   const users = await GetUsersByUsernamesAsync(usernames);
   const img = null
@@ -290,5 +301,6 @@ module.exports = {
   CheckFriendshipStatusAsync,
   CreatePrivateRoomAsync,
   UpdateUserStatusAsync,
-  UpdateUserImgAsync
+  UpdateUserImgAsync,
+  CheckIfUserExist
 };

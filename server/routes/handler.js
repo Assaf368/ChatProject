@@ -9,7 +9,7 @@ const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const path = require('path')
-const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync } = require("../DataBaseFuncs/functions");
+const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync, CheckIfUserExist } = require("../DataBaseFuncs/functions");
 
 
 
@@ -117,6 +117,8 @@ router.post("/api/login", async (req, res) => {
   }
 });
 
+
+
 router.post('/api/home/accepted', async (req,res)=>{
   const {senderUsername} = req.body; 
   const {targetUsername} = req.body; 
@@ -166,6 +168,42 @@ router.post('/api/home/updateUnreadMassagesCounter', async(req,res)=>{
   const {roomId,userId, count} = req.body;
   await UpdateUnreadMassagesCounterAsync(roomId,userId,count);
   res.sendStatus(200);
+})
+
+router.get('/api/home/checkusername', async(req,res)=>{
+  const{username} = req.query;
+  if(username.length <3){
+    return res.send("unvallid username");
+  }
+    const isExist = await CheckIfUserExist(username);
+    if(isExist){
+        res.send(true)
+    }else{
+      res.send(false)
+    }
+
+  
+})
+
+router.get('/api/home/checkpassword', async(req,res)=>{
+  const{password,confirm} = req.query;
+  if(password === confirm){
+    const regex = /^(?=.*[A-Z])(?=.*[a-z]).{8,30}$/
+    if(regex.test(password)){
+      res.json({
+        massage:true
+      })
+    }else{
+      res.json({
+        massage:false
+      })
+    }
+  }else{
+    res.json({
+      massage:"unmached"
+    })
+  }
+  
 })
 
 router.get("/api/home", authenticateToken, async (req, res) => {

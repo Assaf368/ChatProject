@@ -4,6 +4,9 @@
 }
 
 .RgistrationCard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 4px solid;
     background-color: rgba(62, 231, 197,0.8);
     height: 100%;
@@ -25,12 +28,19 @@
     font-size: 20px;
 }
 
+
 input{
     background-color: rgb(44, 51, 113);
     border-radius: 6px ;
-    color: white;
+    color: black;
     height: 30px;
 }
+
+input:invalid{
+    background-color: rgb(44, 51, 113);
+}
+
+
 
 .btn-container{
     display: flex;
@@ -46,4 +56,15 @@ input{
 
 input::placeholder{
     padding-left: 6px;
+}
+
+.reg-error-massages{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(159, 59, 92);
+    font-weight: bolder;
+}
+.successful-massage{
+    color: green;
 }
