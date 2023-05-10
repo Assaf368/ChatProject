@@ -8,9 +8,12 @@ const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
-const path = require('path')
-const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync, CheckIfUserExist, UsernameServerVallidation, PasswordServerVallidation } = require("../DataBaseFuncs/functions");
-
+const path = require('path');
+const { UsernameServerVallidation, PasswordServerVallidation } = require("../DataBaseFuncs/VallidationFunctions");
+const { UpdateUserStatusAsync, UpdateUserImgAsync, GetUserAsync, CheckIfUserExist } = require("../DataBaseFuncs/UserFunctions");
+const { CreateRoomAsync, CreatePrivateRoomAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/RoomFunctions");
+const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync } = require("../DataBaseFuncs/MassageFunctions");
+const { FindUserFriendsAsync, GetUserInvitationsAsync, CheckFriendshipStatusAsync } = require("../DataBaseFuncs/FriendFunctions");
 
 
 const storage = multer.diskStorage({
@@ -22,10 +25,6 @@ const storage = multer.diskStorage({
   }
 });
  const upload = multer({ storage: storage });
-
-
-
-
 
 
 function authenticateToken(req, res, next) {

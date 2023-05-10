@@ -82,7 +82,9 @@ export const LogIn = () => {
             <div className="btn-container">
               <input id="btn" type="submit" value={"Login"} />
             </div>
-            {error && <label>UserName or password are invalid!</label>}
+            <div className="login-error-massages">
+              {error && <label>UserName or password are invalid!</label>}
+            </div>
           </form>
         </Rows>
       </div>

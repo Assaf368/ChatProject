@@ -9,6 +9,9 @@
     height: 100%;
     width: 100%;
     border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header{
@@ -49,3 +52,10 @@ input::placeholder{
     padding-left: 8px;
 }
 
+.login-error-massages{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    font-weight: bold;
+}
