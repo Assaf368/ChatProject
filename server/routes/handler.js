@@ -8,9 +8,12 @@ const Room = require("../models/Room");
 const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
-const path = require('path')
-const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync } = require("../DataBaseFuncs/functions");
-
+const path = require('path');
+const { UsernameServerVallidation, PasswordServerVallidation } = require("../DataBaseFuncs/VallidationFunctions");
+const { UpdateUserStatusAsync, UpdateUserImgAsync, GetUserAsync, CheckIfUserExist } = require("../DataBaseFuncs/UserFunctions");
+const { CreateRoomAsync, CreatePrivateRoomAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/RoomFunctions");
+const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync } = require("../DataBaseFuncs/MassageFunctions");
+const { FindUserFriendsAsync, GetUserInvitationsAsync, CheckFriendshipStatusAsync } = require("../DataBaseFuncs/FriendFunctions");
 
 
 const storage = multer.diskStorage({
@@ -22,10 +25,6 @@ const storage = multer.diskStorage({
   }
 });
  const upload = multer({ storage: storage });
-
-
-
-
 
 
 function authenticateToken(req, res, next) {
@@ -47,8 +46,9 @@ function authenticateToken(req, res, next) {
 }
 
 router.post("/api/register", async (req, res) => {
-  const { username, password } = req.body;
-  if (username && password) {
+  const { username, password,confirm } = req.body;
+  
+  if (UsernameServerVallidation(username) && PasswordServerVallidation(password,confirm)) {
     const hashPassword = await bcrypt.hash(password, 12);
     const user = new User({
       userName: username,
@@ -168,6 +168,21 @@ router.post('/api/home/updateUnreadMassagesCounter', async(req,res)=>{
   res.sendStatus(200);
 })
 
+router.get('/api/home/checkusername', async(req,res)=>{
+  const{username} = req.query;
+  if(username.length <3){
+    return res.send("unvallid username");
+  }
+    const isExist = await CheckIfUserExist(username);
+    if(isExist){
+        res.send(true)
+    }else{
+      res.send(false)
+    }
+
+  
+})
+
 router.get("/api/home", authenticateToken, async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -209,7 +224,6 @@ router.get('/api/home/getfullchat', async(req,res)=>{
   res.send(data);
 })
 
-
 router.get("/api/findOne", async (req,res) =>{
   const {username, senderId} = req.query;
   const targetUser = await GetUserAsync(username);
@@ -248,6 +262,5 @@ router.get("/api/findOne", async (req,res) =>{
   
   
 });
-
 
 module.exports = router;

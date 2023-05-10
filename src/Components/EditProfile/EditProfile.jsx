@@ -40,7 +40,7 @@ export const EditProfile = ({ state }) => {
         <ImageUpload SetImage={SetImage} id={"edit-profile-image-upload"}/>
       </div>
       <div className="edit-profile-status-container">
-          <input className="edit-profile-status-input" placeholder={userDetails.status} type="text" />
+          <input minLength={0} maxLength={50} className="edit-profile-status-input" placeholder={userDetails.status} type="text" />
       </div>
       <div className="edit-profile-submit-btn-container">
           <input  value={"Submit"} type="submit" />

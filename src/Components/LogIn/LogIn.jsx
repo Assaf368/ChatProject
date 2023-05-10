@@ -58,6 +58,9 @@ export const LogIn = () => {
                 placeholder="username"
                 className="element"
                 type="text"
+                minLength={3}
+                maxLength={20}
+                required
               />
             </Between>
             <Between>
@@ -71,12 +74,17 @@ export const LogIn = () => {
                 placeholder="password"
                 className="element"
                 type="password"
+                minLength={8}
+                maxLength={30}
+                required
               />
             </Between>
             <div className="btn-container">
               <input id="btn" type="submit" value={"Login"} />
             </div>
-            {error && <label>UserName or password are invalid!</label>}
+            <div className="login-error-massages">
+              {error && <label>UserName or password are invalid!</label>}
+            </div>
           </form>
         </Rows>
       </div>

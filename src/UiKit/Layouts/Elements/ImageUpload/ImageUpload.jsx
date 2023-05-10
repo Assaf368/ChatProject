@@ -11,7 +11,7 @@ export const ImageUpload = ({SetImage,id}) => {
 
   return (
     <div id={id} className="image-upload-container">
-      <input type="file"  id="file-input" onChange={HandleImage} />
+      <input type="file" accept="image/png, image/gif, image/jpeg"  id="file-input" onChange={HandleImage} />
     </div>
   );
 };

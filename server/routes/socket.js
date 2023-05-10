@@ -1,17 +1,10 @@
 const { Server } = require("socket.io");
-const {
-  CreateRoomAsync,
-  FindGroupsForUserAsync,
-  GetUsersByIdsAsync,
-  UpdateUnreadMassagesCounterAsync,
-  UpdateMassageToDbAsync,
-  GetUserAsync,
-  CheckFriendshipStatusAsync,
-  AddInvitationToDbAsync,
-  CreatePrivateRoomAsync,
-} = require("../DataBaseFuncs/functions");
 const User = require("../models/User");
 const { states } = require("../Enums/enums");
+const { GetUserAsync, GetUsersByIdsAsync } = require("../DataBaseFuncs/UserFunctions");
+const { FindGroupsForUserAsync } = require("../DataBaseFuncs/RoomFunctions");
+const { CheckFriendshipStatusAsync, AddInvitationToDbAsync } = require("../DataBaseFuncs/FriendFunctions");
+const { UpdateUnreadMassagesCounterAsync, UpdateMassageToDbAsync } = require("../DataBaseFuncs/MassageFunctions");
 
 
 

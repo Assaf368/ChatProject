@@ -26,7 +26,7 @@ export const PickFriends = () => {
 
   if (friendsArray) {
      friendSelectorElements = friendsArray.map((friend) => {
-      return <FriendSelector SetUsernames={SetUsernames} username={friend.userName} />;
+      return <FriendSelector usernames ={usernames} SetUsernames={SetUsernames} username={friend.userName} />;
     });
   }
 
