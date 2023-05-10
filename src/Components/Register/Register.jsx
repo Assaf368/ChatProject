@@ -51,41 +51,20 @@ const Register = () => {
     }
   };
 
-  const CheckPasswordVallidation = ()=>{
+  const CheckPasswordVallidation = () => {
     setInvallidPassword(false);
-    const passwordInput = document.querySelector('.password-input');
-    if(passwordVal !== ''){
-      const regex = /^(?=.*[A-Z])(?=.*[a-z]).{8,30}$/
-      if(regex.test(passwordVal)){
+    const passwordInput = document.querySelector(".password-input");
+    if (passwordVal !== "") {
+      const regex = /^(?=.*[A-Z])(?=.*[a-z]).{8,30}$/;
+      if (regex.test(passwordVal)) {
         IsClientElementVallid(passwordInput, true);
-      }else{
-        IsClientElementVallid(passwordInput,false);
+      } else {
+        IsClientElementVallid(passwordInput, false);
         setInvallidPassword(true);
       }
-    }else{
-      IsClientElementVallid(passwordInput,undefined);
+    } else {
+      IsClientElementVallid(passwordInput, undefined);
     }
-    
-  }
-
-  const CheckPasswordValidationServer = async () => {
-    const passwordInput = document.querySelector(".password-input");
-    axios
-      .get("/home/checkpassword", {
-        params: {
-          password: passwordVal,
-          confirm: confirmPasswordVal,
-        },
-      })
-      .then((res) => {
-        if (res.massage === false) {
-          setTakenUsername(true);
-          IsClientElementVallid(passwordInput, true);
-          return true;
-        }
-        IsClientElementVallid(passwordInput, false);
-        return false;
-      });
   };
 
   const ClearMassages = () => {
@@ -94,7 +73,7 @@ const Register = () => {
     setUnidenticalError(false);
     setTakenUsername(false);
     setInVallidUsername(false);
-    setInvallidPassword(false)
+    setInvallidPassword(false);
   };
 
   const CheckConfirmPassword = () => {
@@ -112,6 +91,13 @@ const Register = () => {
     IsClientElementVallid(confirmInput, true);
   };
 
+  const ResetInputsColors = () => {
+    const inputs = document.querySelectorAll('.input')
+    inputs.forEach((input) => {
+      input.style.backgroundColor = "rgb(44, 51, 113)";
+    });
+  };
+
   const [usernameVal, setUsernameVal] = useState("");
   const [passwordVal, setPasswordVal] = useState("");
   const [confirmPasswordVal, setConfirmPasswordVal] = useState("");
@@ -126,18 +112,23 @@ const Register = () => {
     event.preventDefault();
     clearFormFields();
     ClearMassages();
-      axios
-        .post("/register", { username: usernameVal, password: passwordVal })
-        .then((res) => {
-          if (res.data.success === true) {
-            setSuccessMassage(true);
-          } else {
-            setInvallidError(true);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    axios
+      .post("/register", {
+        username: usernameVal,
+        password: passwordVal,
+        confirm: confirmPasswordVal,
+      })
+      .then((res) => {
+        if (res.data.success === true) {
+          setSuccessMassage(true);
+        } else {
+          setInvallidError(true);
+        }
+        ResetInputsColors();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -160,7 +151,7 @@ const Register = () => {
                 maxLength={20}
                 required
                 placeholder="username"
-                className="element username-input"
+                className="element input username-input"
                 type="text"
               />
             </Between>
@@ -173,7 +164,7 @@ const Register = () => {
                 onBlur={CheckPasswordVallidation}
                 required
                 placeholder="password"
-                className="element password-input"
+                className="element input password-input"
                 type="password"
                 pattern="^(?=.*[A-Z])(?=.*[a-z]).{8,30}$"
               />
@@ -187,7 +178,7 @@ const Register = () => {
                 onBlur={CheckConfirmPassword}
                 placeholder="confirm"
                 required
-                className="element confirm-input"
+                className="element input confirm-input"
                 type="password"
               />
             </Between>
@@ -209,13 +200,12 @@ const Register = () => {
                 </label>
               )}
               {invallidUsername && (
-                <label>
-                  Username has to be more than 2 chatacters!
-                </label>
+                <label>Username has to be more than 2 chatacters!</label>
               )}
               {invallidPassword && (
                 <label>
-                  Password has to be min 8 chatecters,at least one capital letter, and at least one regular letter.
+                  Password has to be min 8 chatecters,at least one capital
+                  letter, and at least one regular letter.
                 </label>
               )}
             </div>

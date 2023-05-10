@@ -9,7 +9,7 @@ const {states} = require('../Enums/enums')
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const path = require('path')
-const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync, CheckIfUserExist } = require("../DataBaseFuncs/functions");
+const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync, FindPreviewGroupsForUserAsync, GetUsersByIdsAsync, GetUserInvitationsAsync, FindUserFriendsAsync, GetUserAsync, CheckFriendshipStatusAsync, CreateRoomAsync, CreatePrivateRoomAsync, UpdateUserStatusAsync, UpdateUserImgAsync, CheckIfUserExist, UsernameServerVallidation, PasswordServerVallidation } = require("../DataBaseFuncs/functions");
 
 
 
@@ -47,8 +47,9 @@ function authenticateToken(req, res, next) {
 }
 
 router.post("/api/register", async (req, res) => {
-  const { username, password } = req.body;
-  if (username && password) {
+  const { username, password,confirm } = req.body;
+  
+  if (UsernameServerVallidation(username) && PasswordServerVallidation(password,confirm)) {
     const hashPassword = await bcrypt.hash(password, 12);
     const user = new User({
       userName: username,
@@ -117,8 +118,6 @@ router.post("/api/login", async (req, res) => {
   }
 });
 
-
-
 router.post('/api/home/accepted', async (req,res)=>{
   const {senderUsername} = req.body; 
   const {targetUsername} = req.body; 
@@ -185,27 +184,6 @@ router.get('/api/home/checkusername', async(req,res)=>{
   
 })
 
-router.get('/api/home/checkpassword', async(req,res)=>{
-  const{password,confirm} = req.query;
-  if(password === confirm){
-    const regex = /^(?=.*[A-Z])(?=.*[a-z]).{8,30}$/
-    if(regex.test(password)){
-      res.json({
-        massage:true
-      })
-    }else{
-      res.json({
-        massage:false
-      })
-    }
-  }else{
-    res.json({
-      massage:"unmached"
-    })
-  }
-  
-})
-
 router.get("/api/home", authenticateToken, async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -247,7 +225,6 @@ router.get('/api/home/getfullchat', async(req,res)=>{
   res.send(data);
 })
 
-
 router.get("/api/findOne", async (req,res) =>{
   const {username, senderId} = req.query;
   const targetUser = await GetUserAsync(username);
@@ -286,6 +263,5 @@ router.get("/api/findOne", async (req,res) =>{
   
   
 });
-
 
 module.exports = router;

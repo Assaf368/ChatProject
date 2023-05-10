@@ -268,6 +268,31 @@ const CheckIfUserExist = async(username)=>{
   return true;
 }
 
+const PasswordServerVallidation =(password,confirm)=>{
+  if(password === confirm){
+    const regex = /^(?=.*[A-Z])(?=.*[a-z]).{8,30}$/
+    if(regex.test(password)){
+      return true;
+    }else{
+      return false
+    }
+  }else{
+    return false
+  }
+}
+
+const UsernameServerVallidation =async (username)=>{
+  if(username.length <3){
+    return false
+  }
+    const isExist = await CheckIfUserExist(username);
+    if(isExist){
+        return false
+    }else{
+      return true
+    }
+}
+
 const CreatePrivateRoomAsync = async(usernames,roomName)=>{
   const users = await GetUsersByUsernamesAsync(usernames);
   const img = null
@@ -277,11 +302,11 @@ const CreatePrivateRoomAsync = async(usernames,roomName)=>{
   }
 }
 
-const DeleteImgFromStorage =(path)=>[
+const DeleteImgFromStorage =(path)=>{
   fs.unlink(path,(err)=> {
     console.log(err);
   })
-]
+}
 
 
 
@@ -302,5 +327,7 @@ module.exports = {
   CreatePrivateRoomAsync,
   UpdateUserStatusAsync,
   UpdateUserImgAsync,
-  CheckIfUserExist
+  CheckIfUserExist,
+  PasswordServerVallidation,
+  UsernameServerVallidation
 };
