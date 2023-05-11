@@ -1,3 +1,4 @@
+const { default: userEvent } = require("@testing-library/user-event");
 const Room = require("../models/Room");
 const { GetUserAsync, GetUsersByUsernamesAsync } = require("./UserFunctions");
 
@@ -6,13 +7,17 @@ const { GetUserAsync, GetUsersByUsernamesAsync } = require("./UserFunctions");
 const _GetPreviewGroupsAsync = async (user) => {
     const previewGroups = await Room.find({ 'members.id': user.id })
     .select( "_id name img members").lean().then((rooms)=>{
-        return rooms.map((room)=>{
-          const member = room.members.find(member=> member.id.toString() === user.id );
+        return rooms.map(async (room)=>{
+          const member = room.members.find( member=> member.id.toString() === user.id );
+          let privateChatTargetName = null;
+          let targetUser = null;
           let roomName = null;
-          let img = null;
-          if(room.name === null){
-            roomName = room.members.find(member => member.username !== user.userName).username;
-            img = room.members.find(member => member.username !== user.userName).image;
+          let img = null;          
+          if(room.name === null){//so its a private room
+            privateChatTargetName =  room.members.find(member => member.username !== user.userName).username;
+            targetUser = await GetUserAsync(privateChatTargetName);
+            roomName = targetUser.userName;
+            img= targetUser.image;
           }else{
             roomName = room.name;
             img = room.img
@@ -26,7 +31,7 @@ const _GetPreviewGroupsAsync = async (user) => {
         })
       })
   
-    return previewGroups;
+    return Promise.all(previewGroups);
   };
   
   const _GetGroupsAsync = async(user)=>{
@@ -56,7 +61,7 @@ const _GetPreviewGroupsAsync = async (user) => {
   const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
     const nowTime = new Date();
     const members = users.map((user) =>{
-      return{id:user.id,username: user.userName, unreadMassagesCounter:0}  
+      return{id:user.id,username: user.userName, unreadMassagesCounter:0,img:user.image}  
     } );
     const room = new Room({
       members: members,

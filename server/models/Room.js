@@ -25,6 +25,9 @@ members: {
       required: false,
       min: 0,
       default:0
+    },img: {
+      type: String,
+      required: false,
     }
   }],
   validate: [arrayLimit, ' exceeds the limit of 50']
