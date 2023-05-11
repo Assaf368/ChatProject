@@ -61,7 +61,7 @@ const _GetPreviewGroupsAsync = async (user) => {
   const _SaveRoomToDbAsync = async(users ,roomName, desc,img)=>{
     const nowTime = new Date();
     const members = users.map((user) =>{
-      return{id:user.id,username: user.userName, unreadMassagesCounter:0,img:user.image}  
+      return{id:user.id,username: user.userName, unreadMassagesCounter:0}  
     } );
     const room = new Room({
       members: members,
@@ -91,10 +91,17 @@ const _GetPreviewGroupsAsync = async (user) => {
     }
   }
 
+  const AssignImgToPrivateChat =async(chat,target)=>{
+    const user = await GetUserAsync(target);
+    chat.members.find(member => member.username === target).img = user.image;
+    chat.save();
+  }
+
 
   module.exports = {
     CreateRoomAsync,
     FindPreviewGroupsForUserAsync,
     FindGroupsForUserAsync,
     CreatePrivateRoomAsync,
+    AssignImgToPrivateChat
   }

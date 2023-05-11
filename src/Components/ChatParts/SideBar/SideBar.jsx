@@ -21,12 +21,12 @@ export const SideBar = ({ id, userName }) => {
     dispatch(SwichPickFriendsState());
   };
 
-  const HandleRoomClick = (roomId) => {
+  const HandleRoomClick = (roomId,target) => {
 
     SetUserUnreadMassagesCounter(roomId,0);
     let selected = null;
     axios
-      .get("/home/getfullchat", { params: { roomId: roomId } })
+      .get("/home/getfullchat", { params: { roomId: roomId, target: target } })
       .then((res) => {
         selected = res.data.chat;
         dispatch(AddChatToRedux(selected));

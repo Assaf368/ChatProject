@@ -11,7 +11,7 @@ const multer = require('multer');
 const path = require('path');
 const { UsernameServerVallidation, PasswordServerVallidation } = require("../DataBaseFuncs/VallidationFunctions");
 const { UpdateUserStatusAsync, UpdateUserImgAsync, GetUserAsync, CheckIfUserExist } = require("../DataBaseFuncs/UserFunctions");
-const { CreateRoomAsync, CreatePrivateRoomAsync, FindPreviewGroupsForUserAsync } = require("../DataBaseFuncs/RoomFunctions");
+const { CreateRoomAsync, CreatePrivateRoomAsync, FindPreviewGroupsForUserAsync, AssignImgToPrivateChat } = require("../DataBaseFuncs/RoomFunctions");
 const { ResetUnreadMassagesCounterAsync, UpdateUnreadMassagesCounterAsync } = require("../DataBaseFuncs/MassageFunctions");
 const { FindUserFriendsAsync, GetUserInvitationsAsync, CheckFriendshipStatusAsync } = require("../DataBaseFuncs/FriendFunctions");
 
@@ -215,8 +215,11 @@ router.get('/api/home/friendsdata',async(req,res) =>{
 });
 
 router.get('/api/home/getfullchat', async(req,res)=>{
-  const roomId = req.query.roomId;
+  const {roomId, target} = req.query;
   const chat = await Room.findById(roomId).populate('members massages');
+  if(chat.members.length === 2){
+    await AssignImgToPrivateChat(chat,target);
+  }
   chat.img = `http://localhost:5000/${chat.img}`
   const data = {
     chat : chat
