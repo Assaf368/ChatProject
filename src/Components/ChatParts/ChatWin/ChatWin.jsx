@@ -50,7 +50,7 @@ export const WinChat = ({ id }) => {
         <div className="chat-info">
           <Between>
             <Line>
-            <img src={selectedChat.img} alt="" />
+            <img src={selectedChat.name? selectedChat.img : selectedChat.members.find(member => member.username !== userDetails.username).img} alt="" />
               <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
             </Line>
             <div className="chat-icons">

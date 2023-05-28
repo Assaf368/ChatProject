@@ -42,7 +42,7 @@ export const RoomBlock = ({
   return (
     <div
       onClick={() => {
-        onClick(roomId);
+        onClick(roomId,name);
         HandleResetUnreadMassagesOnDb();
       }}
       className="user-block-container"

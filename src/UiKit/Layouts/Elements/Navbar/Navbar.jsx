@@ -9,6 +9,7 @@ const Navbar = () => {
 
   const HandleLogOut = ()=>{
     socket.disconnect();
+    sessionStorage.clear();
   }
   if(!toggle.chatState)
   {
