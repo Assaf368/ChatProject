@@ -40,6 +40,8 @@ export const PickFriends = () => {
     }
   }
 
+  
+
   const HandleSubmitGroup = ()=>{
     const groupName = document.querySelector('#group-name-input').value;
     const desc = document.querySelector('#discription-input').value;
@@ -79,11 +81,6 @@ export const PickFriends = () => {
           <h3 className="pick-friends-header">Create a room!</h3>
         </div>
         <div className="friends-list-container">
-          <input
-            className="pick-friends-search-input"
-            type="text"
-            placeholder="search..."
-          />
           <div className="friends-list">{friendSelectorElements}</div>
         </div>
         <div className="pick-friends-btn-container">
