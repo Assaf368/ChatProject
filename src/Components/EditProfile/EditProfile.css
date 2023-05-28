@@ -34,10 +34,11 @@
 }
 
 .edit-profile-exit-btn {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
-}
+  object-fit:fill;
+background-color: #fff;}
 
 .edit-profile-exit-btn-container {
   flex: 1;

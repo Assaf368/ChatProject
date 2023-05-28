@@ -78,7 +78,6 @@ export const Menu = () => {
           <button onClick={handleSwich} className="btn">
             Add friend
           </button>
-          <button className="btn">Requests</button>
         </div>
       </div>
       <div className="req-container">

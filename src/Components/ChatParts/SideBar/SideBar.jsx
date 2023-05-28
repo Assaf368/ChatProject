@@ -103,7 +103,7 @@ export const SideBar = ({ id, userName }) => {
             <img
               onClick={HandleSwichPickFriendsState}
               className="plus-img-btn"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiCueRC7FnT8HXDjBgnpiRreipmS9FOGKVLw&usqp=CAU"
+              src="Chat-plusBtn.png"
               alt="Create room botton"
             />
           </div>
