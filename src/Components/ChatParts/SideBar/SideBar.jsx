@@ -16,16 +16,18 @@ export const SideBar = ({ id, userName }) => {
   let selectedId = useRef(null);
   const socket = useSelector((store) => store.socket.socket);
   const userDetails = useSelector((store)=> store.userDetails);
+  const chatsOnRedux = useSelector((store)=> store.onlineRooms.chats);
 
   const HandleSwichPickFriendsState = () => {
     dispatch(SwichPickFriendsState());
   };
 
   const HandleRoomClick = (roomId,target) => {
-
     SetUserUnreadMassagesCounter(roomId,0);
     let selected = null;
-    axios
+    const reduxChat = chatsOnRedux.find(chat => chat._id === roomId);
+    if(reduxChat === undefined){
+      axios
       .get("/home/getfullchat", { params: { roomId: roomId, target: target } })
       .then((res) => {
         selected = res.data.chat;
@@ -33,6 +35,12 @@ export const SideBar = ({ id, userName }) => {
         dispatch(SetSelectedChatId(selected._id));
         selectedId.current = selected._id;
       });
+    }else{
+      selected = reduxChat;
+      dispatch(SetSelectedChatId(selected._id));
+      selectedId.current = selected._id;
+    }
+    
   };
   useEffect(() => {
     axios
