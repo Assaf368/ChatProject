@@ -55,6 +55,10 @@ export const SideBar = ({ id, userName }) => {
       .catch((err) => {
         console.log(err);
       });
+
+      return () => {
+        dispatch(SetSelectedChatId(null));
+      };
   }, []);
 
   useEffect(()=>{
