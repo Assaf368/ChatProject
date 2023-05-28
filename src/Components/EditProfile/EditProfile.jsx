@@ -33,7 +33,7 @@ export const EditProfile = ({ state }) => {
   return state ? (
     <form onSubmit={HandleEtitProfileSumbit} className="edit-profile-container">
       <div className="edit-profile-exit-btn-container">
-        <img onClick={()=> dispatch(SetEditProfileState(false))} className="edit-profile-exit-btn" src="" alt="" />
+        <img onClick={()=> dispatch(SetEditProfileState(false))} className="edit-profile-exit-btn" src="/chat-exitBtn.png" alt="" />
       </div>
       <div className="edit-profile-pic-container">
         <img onClick={HandleImgClick} className="edit-profile-img" src={userDetails.img} alt="" />

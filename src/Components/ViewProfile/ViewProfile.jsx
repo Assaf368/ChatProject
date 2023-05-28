@@ -12,7 +12,7 @@ export const ViewProfile = ({state})=>{
 
     return state ? (
         <div className='view-profile-container'>
-            <img onClick={HandleViewProfileExitBtn} className='view-profile-exit-btn' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReBKjYJhzB-lApuM67GyvTwhk6SFbRxHC70w&usqp=CAU" alt="" />
+            <img onClick={HandleViewProfileExitBtn} className='view-profile-exit-btn' src="/chat-exitBtn.png" alt="" />
             <div className='view-profile-pic-container'>
                 <img className='view-profile-img' src={viewProfile.imgUrl} alt="" />
             </div>
