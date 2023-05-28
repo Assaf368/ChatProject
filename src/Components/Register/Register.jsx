@@ -3,6 +3,7 @@ import { Rows } from "UiKit/Layouts/Line/Line";
 import { Between } from "UiKit/Layouts/Line/Line";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   function clearFormFields() {
@@ -107,11 +108,13 @@ const Register = () => {
   const [takenUsername, setTakenUsername] = useState(false);
   const [invallidUsername, setInVallidUsername] = useState(false);
   const [invallidPassword, setInvallidPassword] = useState(false);
+  const navigate = useNavigate();
 
   async function handleRegistration(event) {
     event.preventDefault();
     clearFormFields();
     ClearMassages();
+    navigate('/');
     axios
       .post("/register", {
         username: usernameVal,
