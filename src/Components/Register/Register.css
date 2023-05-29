@@ -1,64 +1,71 @@
-.RegisterContainer{
-    width: 55%;
-    height: 60%;
-}
 
-.RgistrationCard{
+
+.Register-container{
+    width: 24%;
+    height: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 4px solid;
-    background-color: rgba(62, 231, 197,0.8);
-    height: 100%;
-    width: 100%;
-    border-radius: 30px;
+    background-color: #fff;
+    border-radius: 15px;
+    flex-direction: column;
 }
 
-.header{
-    margin: 4%;
+.Register-header{
+    color: black;
+    flex: 1;
 }
 
 .bodyOfReg{
-    margin: 2%;
-    width: 60%;
-}
-
-.element{
-    margin: 15px;
-    font-size: 20px;
-}
-
-
-
-
-/* input:invalid{
-    background-color:#fff;
-} */
-
-
-
-.btn-container{
     display: flex;
-    justify-content: center;
-}
-
-#btn{
-    width: 70px;
-    height: 40px;
-    border-radius: 4px;
-
-}
-
-input::placeholder{
-    padding-left: 6px;
-}
-
-.reg-error-massages{
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    flex: 8;
+    width: 100%;
+}
+
+
+
+.Register-btn-container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#Register-btn{
+    width: 55%;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #3df7a3;
+    font-size: 18px;
+    color: white;
+    font-weight: bolder;
+    cursor: pointer;
+
+}
+
+
+.reg-error-massages{
+    margin: 6px;
+    display: flex;
     color: rgb(159, 59, 92);
     font-weight: bolder;
+    flex:0.1;   
+}
+
+.taken-username-error{
+    display: flex;
+    color: rgb(159, 59, 92);
+    font-weight: bolder;
+    flex:0.5;   
+}
+
+.unidentical-error{
+    display: flex;
+    color: rgb(159, 59, 92);
+    font-weight: bolder;
+    flex:0.2; 
 }
 .successful-massage{
     color: green;

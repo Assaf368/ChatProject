@@ -1,7 +1,7 @@
 
 .Input-label{
  margin-bottom: 30px;
- width: 70%;
+ width: 100%;
 }
 .Input-element{
 background-color: #fff;
@@ -17,7 +17,7 @@ font-size: 16px;
 
 .Input-title{
  font-weight: bold;
- margin-bottom: 3px;
+ margin-bottom: 2px;
  font-size: 16px;
 }
 
@@ -29,4 +29,12 @@ font-size: 16px;
 
 .Input-element:focus{
     outline: none;
+}
+
+.Input-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    flex-direction: row;
 }
