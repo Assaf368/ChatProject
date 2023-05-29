@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./LogIn.css";
 import axios from "axios";
+import { Input } from "UiKit/Layouts/Elements/Input/Input";
 
 export const LogIn = () => {
   const [usernameVal, setUsernameVal] = useState("");
@@ -39,19 +40,13 @@ export const LogIn = () => {
   }
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <Rows>
-          <div className="header">
+    
+      <div className="login-container">
+          <div className="header-container">
             <h3>Login</h3>
           </div>
-
           <form onSubmit={handleLogin} className="body-of-login">
-            <Between>
-              <label className="element" htmlFor="UserName">
-                UserName:
-              </label>
-              <input
+              {/* <input
                 onInput={(e) => {
                   setUsernameVal(e.target.value);
                 }}
@@ -61,33 +56,37 @@ export const LogIn = () => {
                 minLength={3}
                 maxLength={20}
                 required
-              />
-            </Between>
-            <Between>
-              <label className="element" htmlFor="Password">
-                Password:
-              </label>
-              <input
+              /> */}
+              <Input 
+              title="Username"
+                placeholder="Type your username"
+                onInput={(e) => {
+                  setUsernameVal(e.target.value);
+                }}
+                type="text"
+                minLength={3}
+                maxLength={20}
+                >
+              </Input>
+              <Input
+              title="Password"
                 onInput={(e) => {
                   setPasswordVal(e.target.value);
                 }}
-                placeholder="password"
+                placeholder="Type your password"
                 className="element"
                 type="password"
                 minLength={8}
                 maxLength={30}
                 required
               />
-            </Between>
-            <div className="btn-container">
-              <input id="btn" type="submit" value={"Login"} />
+            <div className="login-btn-container">
+              <input id="login-btn" type="submit" value={"Login"} />
             </div>
             <div className="login-error-massages">
               {error && <label>UserName or password are invalid!</label>}
             </div>
           </form>
-        </Rows>
       </div>
-    </div>
   );
 };

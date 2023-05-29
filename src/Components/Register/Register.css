@@ -29,16 +29,11 @@
 }
 
 
-input{
-    background-color: rgb(44, 51, 113);
-    border-radius: 6px ;
-    color: black;
-    height: 30px;
-}
 
-input:invalid{
-    background-color: rgb(44, 51, 113);
-}
+
+/* input:invalid{
+    background-color:#fff;
+} */
 
 
 
