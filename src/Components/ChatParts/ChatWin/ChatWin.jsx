@@ -104,7 +104,7 @@ export const WinChat = ({ id }) => {
   else{
     return(
       <div className="non-selcted-room-view">
-        Select room and start chating!
+        <img className="chatWin-non-selected-room-bgc" src="space-g257c0171b_1280.png" alt="" />
       </div>
     )
   }

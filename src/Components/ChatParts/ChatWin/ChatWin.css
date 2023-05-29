@@ -46,6 +46,7 @@
   flex: 7;
   background-color: #ddddf7;
   padding-top: 6px;
+  background-image: url('/public/template-g6bf3c1841_1280.jpg');
 }
 
 .chat-icons{
@@ -117,10 +118,16 @@
 }
 
 .non-selcted-room-view{
-  display: flex;
   font-size: 36px;
-  background-color: #f1e9e9a0;
   flex: 2;
   align-items: center;
   justify-content: center; 
+}
+
+.chatWin-non-selected-room-bgc{
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 0;
+  margin: 0px;
 }
