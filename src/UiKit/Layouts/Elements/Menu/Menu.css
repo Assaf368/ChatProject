@@ -38,11 +38,15 @@
     align-items: center;
     border-radius: 5px;
     height: 50%;
+    overflow: hidden;
+
 }
 .menu-container{
     height: 70%;
     width: 10%;
-    margin-left: 3px;;
+    margin-left: 3px;
+    
+
 }
 .header{
     font-size: 20px;
