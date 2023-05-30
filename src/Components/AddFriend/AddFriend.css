@@ -2,9 +2,9 @@
     display: flex;
     position: fixed;
     flex-direction: column;
-    width: 30%;
-    height: 40%;
-    background-color: #313856;
+    width: 20%;
+    height: 55%;
+    background-color: rgb(110, 116, 171);
     border-radius: 18px;
     align-items: center;
     color: white;
@@ -13,27 +13,38 @@
 .inputs-container{
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 100%;
     align-items: center;
     justify-content: center;
-    margin-top: 6%;
+    flex: 6;
 
 }
 
 .search-btn-of-addFriend{
-    width: 30%;
-    height: 55px;
-    margin: 14px;
+    width: 35%;
+    height: 16%;
     font-size: 20px;
     font-weight: bold;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
-.input-of-addFreind{
-    width: 70%;
-    text-align: center;
+#add-friend-serach-input{
+    background-color: rgb(110, 116, 171);
+    color: white;
 }
 
 .results-of-search{
-    height: 20%;
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-friend-exit-btn-container{
+    flex: 1;
+    align-self: flex-end;
+}
+
+.add-friend-header{
+    font-size: 34px;
 }

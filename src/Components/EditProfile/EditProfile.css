@@ -48,11 +48,10 @@ background-color: #fff;}
 
 
 .edit-profile-submit-btn-container{
-    flex: 2;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     width: 100%;
 }
 
@@ -69,13 +68,12 @@ background-color: #fff;}
 }
 
 .edit-profile-submit-btn{
-  width: 40%;
-  height: 35%;
-  border-radius: 20px;
-  background-color: #3df7a3;
-  font-size: 18px;
-  color: white;
-  font-weight: bolder;
+  border-radius: 6px;
+  font-family: 'Paytone One', sans-serif;
+  color:#313856 ;
   cursor: pointer;
-  border: 0px;
+  width: 40%;
+  height: 27%;
+  border-radius: 20px;
+  
 }
