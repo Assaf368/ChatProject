@@ -13,29 +13,29 @@ export const RoomBlock = ({
   unreadMassages,
 }) => {
 
-    // const unreadMassagesRef = useRef(unreadMassages);
+       const unreadMassagesRef = useRef(unreadMassages);
        const [count, setCount] = useState(unreadMassages);
        const userId = useSelector((store)=> store.userDetails.id);
 
     useEffect(()=>{
         return ()=>{
-            if(count !== 0 && count !== undefined){
-                axios.post('/home/updateUnreadMassagesCounter',{roomId : roomId,userId:userId, count: count})
+            if(unreadMassagesRef.current !== 0 && unreadMassagesRef.current !== undefined){
+                axios.post('/home/updateUnreadMassagesCounter',{roomId : roomId,userId:userId, count: unreadMassagesRef.current})
                 .catch(err => console.log(err));
             }
         }
     },[])
 
-    // useEffect(()=>{
-    //     unreadMassagesRef.current = unreadMassages;
-    // },[unreadMassages])
+    useEffect(()=>{
+        unreadMassagesRef.current = unreadMassages;
+    },[unreadMassages])
 
     const HandleResetUnreadMassagesOnDb = ()=>{
-        if(count !== 0){
+        if(unreadMassagesRef !== 0){
             axios.post('/home/resetUnreadMassagesCounter',{params :{roomId : roomId,userId:userId}})
             .catch(err => console.log(err));
             setCount(0);
-            // unreadMassagesRef.current = 0;
+            unreadMassagesRef.current = 0;
         }
     }
 
