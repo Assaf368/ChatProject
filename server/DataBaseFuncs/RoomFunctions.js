@@ -1,4 +1,3 @@
-const { default: userEvent } = require("@testing-library/user-event");
 const Room = require("../models/Room");
 const { GetUserAsync, GetUsersByUsernamesAsync } = require("./UserFunctions");
 

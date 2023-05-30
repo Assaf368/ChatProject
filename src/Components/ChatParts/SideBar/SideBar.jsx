@@ -6,7 +6,8 @@ import "./SideBar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { SetFriends, SetInvitations } from "State/userDetails";
 import { SetEditProfileState, SwichPickFriendsState } from "State/toggle";
-import {  AddChatToRedux, AddMassageToChat, SetSelectedChatId } from "State/onlineRooms";
+import {  AddChatToRedux, AddMassageToChat, SetRoomsForShowRedux, SetSelectedChatId } from "State/onlineRooms";
+import { enableMapSet } from "immer";
 
 export const SideBar = ({ id, userName }) => {
   const dispatch = useDispatch();
@@ -16,16 +17,49 @@ export const SideBar = ({ id, userName }) => {
   let selectedId = useRef(null);
   const socket = useSelector((store) => store.socket.socket);
   const userDetails = useSelector((store)=> store.userDetails);
+  const chatsOnRedux = useSelector((store)=> store.onlineRooms.chats);
+  const roomsForShowRedux = useSelector((store)=> store.onlineRooms.roomsForShow);
 
   const HandleSwichPickFriendsState = () => {
     dispatch(SwichPickFriendsState());
   };
 
-  const HandleRoomClick = (roomId,target) => {
+  const HandleSearch = (value)=>{
+    const chars = value.split('');
+    let updatedClientRooms = []
+    if(value === ''){
+      SetClientRooms(roomsForShowRedux);
 
+    }else{
+      if(clientRooms!== null){
+         updatedClientRooms = clientRooms.map((room)=>{
+          if(room !== null && room !== undefined){
+            let passesTest = true;
+            for (let index = 0; index < chars.length; index++) {
+              if(room.props.name.includes(chars[index].toString())||room.props.name.includes(chars[index].toLowerCase())){
+                passesTest = true
+              }else{
+                passesTest = false;
+              }
+            }
+            if(passesTest){
+              return room
+            }else{
+              return null
+            }
+          }
+        })
+      }
+          SetClientRooms(updatedClientRooms);
+      }
+    }
+
+  const HandleRoomClick = (roomId,target) => {
     SetUserUnreadMassagesCounter(roomId,0);
     let selected = null;
-    axios
+    const reduxChat = chatsOnRedux.find(chat => chat._id === roomId);
+    if(reduxChat === undefined){
+      axios
       .get("/home/getfullchat", { params: { roomId: roomId, target: target } })
       .then((res) => {
         selected = res.data.chat;
@@ -33,6 +67,13 @@ export const SideBar = ({ id, userName }) => {
         dispatch(SetSelectedChatId(selected._id));
         selectedId.current = selected._id;
       });
+    }else{
+      selected = reduxChat;
+      dispatch(SetSelectedChatId(selected._id));
+      selectedId.current = selected._id;
+    }
+    let searchInput = document.querySelector('.side-bar-serach-input');
+    searchInput.value = '';
   };
   useEffect(() => {
     axios
@@ -74,6 +115,7 @@ export const SideBar = ({ id, userName }) => {
         />
       );
     });
+    dispatch(SetRoomsForShowRedux(roomComponents));
     SetClientRooms(roomComponents);
   },[unreadCounts])
 
@@ -122,15 +164,10 @@ export const SideBar = ({ id, userName }) => {
         </Between>
       </div>
       <div className="search-bar">
-        <input type="text" placeholder="search for a chat..." />
-        <button id="search-btn">
-          {" "}
-          <img
-            id="search-img"
-            src="https://www.freeiconspng.com/thumbs/search-icon-png/search-icon-png-5.png"
-            alt=""
-          />
-        </button>
+        <input className="side-bar-serach-input" onInput={(e) => {
+                  HandleSearch(e.target.value);
+                }} 
+                type="text" placeholder="search for a chat..." />
       </div>
       <div className="friends-container">
         <div className="friends">

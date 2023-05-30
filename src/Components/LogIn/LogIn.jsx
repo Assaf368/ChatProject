@@ -25,6 +25,7 @@ export const LogIn = () => {
     setError(false);
     clearFormFields();
 
+    navigate('/login');
     axios.post("/login", { username: usernameVal, password: passwordVal })
       .then((res) => {
         if (res.data.auth === true) {

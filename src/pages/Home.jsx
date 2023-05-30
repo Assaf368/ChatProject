@@ -13,6 +13,7 @@ import { SetSocketConnection } from "State/socket";
 import io from "socket.io-client";
 import { ViewProfile } from "Components/ViewProfile/ViewProfile";
 import { EditProfile } from "Components/EditProfile/EditProfile";
+import { useNavigate } from "react-router-dom";
 
 
 export const Home = () => {
@@ -21,6 +22,7 @@ export const Home = () => {
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   const [token] = useState(sessionStorage.getItem("token"));
+  const navigate = useNavigate();
   
   useEffect(() => {
     axios
@@ -37,6 +39,8 @@ export const Home = () => {
           dispatch(SetChatState(true));
           dispatch(SetUserDetails(res.data));
           socket.emit("login", { username: res.data.username });
+        }else{
+          navigate('/login', { replace: true });
         }
       });
   }, [token]);

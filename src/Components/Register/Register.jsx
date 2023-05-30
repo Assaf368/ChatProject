@@ -1,6 +1,7 @@
 import { Input } from "UiKit/Layouts/Elements/Input/Input";
 import "./Register.css";
 import axios from "axios";
+
 import { useRef, useState } from "react";
 
 const Register = () => {
@@ -98,14 +99,17 @@ const Register = () => {
   const [unidenticalError, setUnidenticalError] = useState(false);
   const [takenUsername, setTakenUsername] = useState(false);
 
+
   const usernameEl = useRef(null);
   const passwordEl = useRef(null);
   const confirmEl = useRef(null);
+
 
   async function handleRegistration(event) {
     event.preventDefault();
     clearFormFields();
     ClearMassages();
+    navigate('/');
     axios
       .post("/register", {
         username: usernameVal,
