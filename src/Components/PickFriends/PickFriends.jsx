@@ -58,6 +58,8 @@ export const PickFriends = () => {
     SetShowGroupComp(false);
     dispatch(SwichPickFriendsState());
     SetUsernames([]);
+    window.location.reload();
+
   }
   
   const HandleCreatePrivateChat = ()=>{
@@ -66,6 +68,7 @@ export const PickFriends = () => {
     axios.post('/home/createroom', {usernames: usernames})
       dispatch(SwichPickFriendsState());
       SetUsernames([]);
+      window.location.reload();
   }
 
 
