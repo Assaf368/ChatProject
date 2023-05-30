@@ -1,4 +1,5 @@
 .pick-friends-container{
+    font-family:'Heebo', sans-serif;
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -9,6 +10,7 @@
     width: 35%;
     border-radius: 12px;
     overflow: hidden;
+    font-weight: bold;
 }
 .friends-list-container{
     display: flex;
