@@ -4,6 +4,7 @@ import { SetEditProfileState } from "State/toggle";
 import { ImageUpload } from "UiKit/Layouts/Elements/ImageUpload/ImageUpload";
 import { useState } from "react";
 import axios from "axios";
+import { Input } from "UiKit/Layouts/Elements/Input/Input";
 
 export const EditProfile = ({ state }) => {
   const dispatch = useDispatch();
@@ -40,10 +41,10 @@ export const EditProfile = ({ state }) => {
         <ImageUpload SetImage={SetImage} id={"edit-profile-image-upload"}/>
       </div>
       <div className="edit-profile-status-container">
-          <input minLength={0} maxLength={50} className="edit-profile-status-input" placeholder={userDetails.status} type="text" />
+          <Input id={"edit-profile-status-input"} title="Status:" minLength={0} maxLength={50} className="edit-profile-status-input" placeholder={userDetails.status} type="text" />
       </div>
       <div className="edit-profile-submit-btn-container">
-          <input  value={"Submit"} type="submit" />
+          <input className="edit-profile-submit-btn"  value={"Submit"} type="submit" />
       </div>
     </form>
   ) : null;
