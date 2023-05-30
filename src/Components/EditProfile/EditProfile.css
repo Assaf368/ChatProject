@@ -1,9 +1,9 @@
 .edit-profile-container {
   display: flex;
   position: fixed;
-  background-color: #fff;
-  width: 30%;
-  height: 45%;
+  background-color: rgb(110, 116, 171);
+  width: 22%;
+  height: 62%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -48,16 +48,32 @@ background-color: #fff;}
 
 
 .edit-profile-submit-btn-container{
-    flex: 2;
+    flex: 3;
     display: flex;
     align-items: center;
-    cursor: pointer;
+    justify-content: center;
+    width: 100%;
 }
 
 #edit-profile-image-upload{
     visibility: hidden;
 }
 
-.edit-profile-status-input{
-    width: 60%;
+.edit-profile-status-container{
+    width: 100%;
+}
+
+#edit-profile-status-input{
+  background-color: rgb(110, 116, 171);
+}
+
+.edit-profile-submit-btn{
+  border-radius: 6px;
+  font-family: 'Paytone One', sans-serif;
+  color:#313856 ;
+  cursor: pointer;
+  width: 40%;
+  height: 27%;
+  border-radius: 20px;
+  
 }

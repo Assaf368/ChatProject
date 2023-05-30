@@ -2,10 +2,11 @@ import axios from "axios";
 import "./AddFriend.css";
 import { Invitation } from "Components/Invitation/Invitation";
 import ReactDOM from 'react-dom';
-import React from "react";
+import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SetViewProfileState } from "State/toggle";
+import { SetViewProfileState, SwichAddFriendState } from "State/toggle";
 import { SetViewProfileDetails } from "State/viewProfile";
+import { Input } from "UiKit/Layouts/Elements/Input/Input";
 
 
 
@@ -15,11 +16,12 @@ export const AddFriend = () => {
   const socket = useSelector((store)=> store.socket.socket);
   const toggle = useSelector((store => store.toggle));
   const state = toggle.addFriendState;
+  const addFriendInputEl = useRef(null);
   
 
   const handleSearch = () => {
     const resDiv = document.querySelector('.results-of-search');
-    const inputVal = document.querySelector(".input-of-addFreind").value;
+    const inputVal = addFriendInputEl.current.value;
     clearField();
     removeAllChildNodes(resDiv);
     axios
@@ -74,7 +76,7 @@ export const AddFriend = () => {
     dispatch(SetViewProfileState(true));
   }
   const clearField = () => {
-    document.querySelector(".input-of-addFreind").value = "";
+    addFriendInputEl.current.value = "";
   };
   function removeAllChildNodes(parent) {
     if (parent && parent.props && parent.props.children){
@@ -86,18 +88,23 @@ export const AddFriend = () => {
 
   return state ? (
     <div className="add-friend-container">
-      <h3>Add new friend</h3>
+      <div className="add-friend-exit-btn-container">
+        <img onClick={()=> dispatch(SwichAddFriendState())} className="edit-profile-exit-btn" src="/chat-exitBtn.png" alt="" />
+      </div>
+      <h3 className="add-friend-header">Add new friend</h3>
       <div className="inputs-container">
-        <input
-          className="input-of-addFreind"
+        <Input
+        id={"add-friend-serach-input"}
+        title="Enter a username"
+          ref={addFriendInputEl}
           type="text"
-          placeholder="UserName"
+          placeholder="Your next friend is..."
         />
         <button onClick={handleSearch} className="search-btn-of-addFriend">
           Search
         </button>
-        <div className="results-of-search"></div>
       </div>
+      <div className="results-of-search"></div>
     </div>
   ) : null;
 };

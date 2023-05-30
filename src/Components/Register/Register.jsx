@@ -3,6 +3,7 @@ import "./Register.css";
 import axios from "axios";
 
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   function clearFormFields() {
@@ -98,6 +99,7 @@ const Register = () => {
   const [invallidError, setInvallidError] = useState(false);
   const [unidenticalError, setUnidenticalError] = useState(false);
   const [takenUsername, setTakenUsername] = useState(false);
+  const navigate = useNavigate();
 
 
   const usernameEl = useRef(null);

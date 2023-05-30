@@ -46,7 +46,9 @@
   flex: 7;
   background-color: #ddddf7;
   padding-top: 6px;
-  background-image: url('/public/template-g6bf3c1841_1280.jpg');
+  background-image: url('/public/instagram-g3fc1b079b_1280.png');
+  background-position:center;
+  background-size: 100% ;
 }
 
 .chat-icons{
