@@ -46,18 +46,8 @@ export const LogIn = () => {
             <h3>Login</h3>
           </div>
           <form onSubmit={handleLogin} className="body-of-login">
-              {/* <input
-                onInput={(e) => {
-                  setUsernameVal(e.target.value);
-                }}
-                placeholder="username"
-                className="element"
-                type="text"
-                minLength={3}
-                maxLength={20}
-                required
-              /> */}
-              <Input 
+            <div className="Login-username-and-password-inputs">
+            <Input 
               title="Username"
                 placeholder="Type your username"
                 onInput={(e) => {
@@ -80,6 +70,8 @@ export const LogIn = () => {
                 maxLength={30}
                 required
               />
+            </div>
+              
             <div className="login-btn-container">
               <input id="login-btn" type="submit" value={"Login"} />
             </div>
