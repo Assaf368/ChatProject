@@ -43,7 +43,7 @@ export const LogIn = () => {
     
       <div className="login-container">
           <div className="header-container">
-            <h3>Login</h3>
+            <div className="LogIn-header">Login</div>
           </div>
           <form onSubmit={handleLogin} className="body-of-login">
             <div className="Login-username-and-password-inputs">
