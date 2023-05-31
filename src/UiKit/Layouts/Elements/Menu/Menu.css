@@ -44,13 +44,13 @@
 }
 .menu-container{
     height: 70%;
-    width: 10%;
+    width: 20%;
     margin-left: 3px;
     
 
 }
 .header{
-    font-size: 20px;
+    font-size: 16px;
     color: white;
     text-align: center;
     font-weight: bold;
@@ -58,22 +58,20 @@
 .requests{
     height: 100%;
     width: 100%;
-}
+    overflow: hidden;
 
+}
 
 @media only screen and (min-width: 501px) and (max-width:960px) {
     .header{
-        font-size: 14px;
-        
+        font-size: 14px; 
     }
-
     .btn{
         font-size: 10px;
     }
     .requests{
         font-size: 10px;
     }
-    
 }
 
 
@@ -81,12 +79,11 @@
     .header{
         font-size: 8px;
         font-size: 8px;
-
     }
 
     .btn{
         font-size: 6px;
-        height: 13%;
+        height: 16%;
         width: 85%;
     }
 }
