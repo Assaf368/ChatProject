@@ -30,7 +30,7 @@
 .my-massage-date-container{
     display: flex;
     font-size: 12px;
-    justify-content: end;
+    justify-content: flex-end;
     font-weight: bold;
     width: 92%;
     color: rgb(73, 71, 71);

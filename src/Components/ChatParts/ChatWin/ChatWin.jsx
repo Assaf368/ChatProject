@@ -72,7 +72,7 @@ export const WinChat = ({ id }) => {
             if(massage.name !== userDetails.username){
               return <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/>
             }else{
-              return <MyMassage text={massage.text} date={massage.date} />
+              return <MyMassage key={massage._id} text={massage.text} date={massage.date} />
             }
           }): null }
         </div>
