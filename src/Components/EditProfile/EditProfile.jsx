@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./EditProfile.css";
 import { SetEditProfileState } from "State/toggle";
 import { ImageUpload } from "UiKit/Layouts/Elements/ImageUpload/ImageUpload";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import { Input } from "UiKit/Layouts/Elements/Input/Input";
 
@@ -10,6 +10,7 @@ export const EditProfile = ({ state }) => {
   const dispatch = useDispatch();
   const userDetails = useSelector((store)=> store.userDetails);
   const [image,SetImage] = useState(null);
+  const statusInputEl = useRef(null);
 
   const HandleImgClick = ()=>{
     const imageUploadDiv = document.querySelector('#edit-profile-image-upload');
@@ -18,7 +19,7 @@ export const EditProfile = ({ state }) => {
   }
 
   const HandleEtitProfileSumbit = (event)=>{
-    const status = event.target.querySelector('.edit-profile-status-input').value;
+    const status = statusInputEl.current.value;
     const formData = new FormData();
     formData.append('image', image);
     formData.append('status', status);
@@ -41,7 +42,7 @@ export const EditProfile = ({ state }) => {
         <ImageUpload SetImage={SetImage} id={"edit-profile-image-upload"}/>
       </div>
       <div className="edit-profile-status-container">
-          <Input id={"edit-profile-status-input"} title="Status:" minLength={0} maxLength={50} className="edit-profile-status-input" placeholder={userDetails.status} type="text" />
+          <Input ref={statusInputEl} id={"edit-profile-status-input"} title="Status:" minLength={0} maxLength={50} className="edit-profile-status-input" placeholder={userDetails.status} type="text" />
       </div>
       <div className="edit-profile-submit-btn-container">
           <input className="edit-profile-submit-btn"  value={"Submit"} type="submit" />

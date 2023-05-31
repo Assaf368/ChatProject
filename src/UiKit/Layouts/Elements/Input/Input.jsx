@@ -6,7 +6,7 @@ export const Input = React.forwardRef(({...props},ref)=>{
         <div className='Input-container'>
          <label className='Input-label'>
            <div className='Input-title'>{props.title}</div>
-           <input id={props.id} className='Input-element' tooltipState={props.tooltipState} ref={ref} required type={props.type} placeholder={props.placeholder} onBlur={props.onBlur} pattern={props.pattern} onInput={props.onInput} minLength={props.minLength} maxLength={props.maxLength} />
+           <input id={props.id} className='Input-element'  ref={ref} required type={props.type} placeholder={props.placeholder} onBlur={props.onBlur} pattern={props.pattern} onInput={props.onInput} minLength={props.minLength} maxLength={props.maxLength} />
          </label>
         </div>
         
