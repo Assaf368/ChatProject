@@ -145,7 +145,7 @@ export const SideBar = ({ id, userName }) => {
       <div className="navbar">
         <Between>
           <div className="logo-container">
-            <h4>W.o.C</h4>
+            <div className="side-bar-navbar-logo">W.o.C</div>
             <img
               onClick={HandleSwichPickFriendsState}
               className="plus-img-btn"
