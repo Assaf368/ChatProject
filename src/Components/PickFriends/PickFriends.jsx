@@ -1,18 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./PickFriends.css";
-import produce from "immer";
 import { FriendSelector } from "Components/FriendSelector/FriendSelector";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CreateGroup } from "Components/CreateGroup/CreateGroup";
-import { EmitCreateRoom } from "State/socket";
 import { SwichPickFriendsState } from "State/toggle";
 
 export const PickFriends = () => {
   const dispatch = useDispatch(); 
     const userDetails = useSelector((store) => store.userDetails);
     const toggle = useSelector((store) => store.toggle);
-    const socket = useSelector((store)=> store.socket.socket);
     const [usernames, SetUsernames] = useState([]);
     const [showGroupComp, SetShowGroupComp] = useState(false);
     const[image, SetImage] = useState(null);
@@ -22,11 +19,11 @@ export const PickFriends = () => {
 
     useEffect(()=>{
         usernames.push(userDetails.username);
-    },[])
+    },[userDetails.username,usernames])
 
   if (friendsArray) {
-     friendSelectorElements = friendsArray.map((friend) => {
-      return <FriendSelector usernames ={usernames} SetUsernames={SetUsernames} username={friend.userName} />;
+     friendSelectorElements = friendsArray.map((friend,index) => {
+      return <FriendSelector key={index} usernames ={usernames} SetUsernames={SetUsernames} username={friend.userName} />;
     });
   }
 

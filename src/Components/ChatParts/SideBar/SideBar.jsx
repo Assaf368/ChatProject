@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { SetFriends, SetInvitations } from "State/userDetails";
 import { SetEditProfileState, SwichPickFriendsState } from "State/toggle";
 import {  AddChatToRedux, AddMassageToChat, SetRoomsForShowRedux, SetSelectedChatId } from "State/onlineRooms";
-import { enableMapSet } from "immer";
 
 export const SideBar = ({ id, userName }) => {
   const dispatch = useDispatch();
@@ -48,6 +47,7 @@ export const SideBar = ({ id, userName }) => {
               return null
             }
           }
+          return null
         })
       }
           SetClientRooms(updatedClientRooms);
@@ -100,7 +100,7 @@ export const SideBar = ({ id, userName }) => {
       return () => {
         dispatch(SetSelectedChatId(null));
       };
-  }, []);
+  }, [dispatch,userName]);
 
   useEffect(()=>{
     let roomComponents = previewChatsRef.current.map((chat) => {

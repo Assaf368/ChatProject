@@ -17,7 +17,7 @@
     display: flex;
     font-size: 12px;
     font-weight: bold;
-    justify-content: start;
+    justify-content: flex-start;
     width: 90%;
     color: rgb(73, 71, 71);
 }

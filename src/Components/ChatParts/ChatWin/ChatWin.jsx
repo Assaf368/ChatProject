@@ -4,11 +4,9 @@ import "./ChatWin.css";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { MyMassage } from "../MyMassage/MyMassage";
-import { ImageUpload } from "UiKit/Layouts/Elements/ImageUpload/ImageUpload";
 
 
 export const WinChat = ({ id }) => {
-  const selectedChatId = useSelector((store)=> store.onlineRooms.selectedChatId);
   const selectedChat = useSelector(store => store.onlineRooms.chats.find(chat=> chat._id === store.onlineRooms.selectedChatId));
   const socket = useSelector((store)=> store.socket.socket);
   const userDetails = useSelector((store)=> store.userDetails);
@@ -72,9 +70,9 @@ export const WinChat = ({ id }) => {
         <div className="massages-card">
           {selectedChat.massages? selectedChat.massages.map(massage =>{
             if(massage.name !== userDetails.username){
-              return <Massage name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/>
+              return <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/>
             }else{
-              return <MyMassage text={massage.text} date={massage.date} />
+              return <MyMassage key={massage._id} text={massage.text} date={massage.date} />
             }
           }): null }
         </div>

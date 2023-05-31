@@ -18,7 +18,6 @@ export const onlineRoomsSlice = createSlice({
                 state.selectedChatId = action.payload;
         },
         AddMassageToChat:(state,action) =>{
-            console.log(state.chats);
             const chat = state.chats.find(chat=> chat._id === action.payload.roomId);
             const {senderId,text,roomId,username} = action.payload;
             const now = new Date();
