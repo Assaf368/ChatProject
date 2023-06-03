@@ -48,7 +48,8 @@
   padding-top: 6px;
   background-image: url('/public/instagram-g3fc1b079b_1280.png');
   background-position:center;
-  background-size: 100% ;
+  background-size: cover;
+  
 }
 
 .chat-icons{
