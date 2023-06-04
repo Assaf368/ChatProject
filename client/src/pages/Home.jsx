@@ -33,7 +33,7 @@ export const Home = () => {
       })
       .then((res) => {
         if (res.data.success === true) {
-          const socket = io("http://localhost:5000");
+          const socket = io(process.env.API_URL);
           dispatch(SetSocketConnection(socket));
           setAuth(true);
           dispatch(SetChatState(true));
