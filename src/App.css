@@ -16,9 +16,7 @@ html, body ,#root , .App{
 }
 
 
-h3{
-font-size: 280%;
-}
+
 
 button{
   border-radius: 6px;
@@ -26,6 +24,7 @@ button{
   color:#313856 ;
   cursor: pointer;
 }
+
 
 
 

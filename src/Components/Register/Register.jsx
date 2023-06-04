@@ -135,7 +135,7 @@ const Register = () => {
 
       <div className="Register-container">
           <div className="Register-header">
-            <h3>Register</h3>
+            <div>Register</div>
           </div>
 
           <form onSubmit={handleRegistration} className="bodyOfReg">

@@ -50,7 +50,6 @@ export const Home = () => {
       <>
         <Navbar />
         <Chat userName={userDetails.username} />
-        <Menu></Menu>
         <AddFriend state={toggle.addFriendState}></AddFriend>
         {toggle.pickFriendsState && <PickFriends></PickFriends>}
         <ViewProfile state={toggle.viewProfileState}/>
