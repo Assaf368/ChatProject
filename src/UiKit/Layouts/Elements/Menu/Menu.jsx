@@ -5,7 +5,7 @@ import { SwichAddFriendState } from "State/toggle";
 import { InviteConfirmation } from "Components/InviteConfirmation/InviteConfirmation";
 import axios from "axios";
 
-export const Menu = () => {
+export const Menu = ({id}) => {
   const dispatch = useDispatch();
   const invitations = useSelector((store) => store.userDetails.invitations);
   const username = useSelector((store) => store.userDetails.username);
@@ -71,9 +71,9 @@ export const Menu = () => {
   };
 
   return (
-    <div className="menu-container">
+    <div id={id} className="menu-container">
       <div className="btns-container">
-        <h4 className="header">Menu</h4>
+        <div className="header">Menu</div>
         <div className="btns">
           <button onClick={handleSwich} className="btn">
             Add friend
@@ -81,7 +81,7 @@ export const Menu = () => {
         </div>
       </div>
       <div className="req-container">
-        <h4 className="header">Requests box</h4>
+        <div className="header">Requests box</div>
         <div className="requests">
           {requests? requests : null}
         </div>

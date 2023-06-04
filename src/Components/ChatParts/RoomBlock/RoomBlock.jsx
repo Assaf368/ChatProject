@@ -2,7 +2,9 @@ import { Line, Rows } from "UiKit/Layouts/Line/Line";
 import "./RoomBlock.css";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SetViewProfileDetails } from "State/viewProfile";
+import { SetViewProfileState } from "State/toggle";
 
 export const RoomBlock = ({
   onClick,
@@ -11,7 +13,14 @@ export const RoomBlock = ({
   imgUrl,
   lastMassage,
   unreadMassages,
+  bio
 }) => {
+  const dispatch = useDispatch();
+
+  const HandleViewProfile = (name, imgUrl,bio)=>{
+    dispatch(SetViewProfileDetails({username:name,imgUrl:imgUrl, desc:bio}));
+    dispatch(SetViewProfileState(true));
+  }
 
        const unreadMassagesRef = useRef(unreadMassages);
        const [count, setCount] = useState(unreadMassages);
@@ -48,7 +57,7 @@ export const RoomBlock = ({
       className="user-block-container"
     >
       <Line>
-        <img src={imgUrl} alt="user" />
+        <img onClick={ ()=> HandleViewProfile(name,imgUrl,bio)} src={imgUrl} alt="user" />
         <div className="details-container">
           <Rows>
             <div className="name-div">{name}</div>

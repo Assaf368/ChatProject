@@ -23,6 +23,8 @@ export const SideBar = ({ id, userName }) => {
     dispatch(SwichPickFriendsState());
   };
 
+
+
   const HandleSearch = (value)=>{
     const chars = value.split('');
     let updatedClientRooms = []
@@ -112,6 +114,7 @@ export const SideBar = ({ id, userName }) => {
           onClick={HandleRoomClick}
           name={chat.name}
           imgUrl={chat.img}
+          bio={chat.status? chat.status: chat.desc}
         />
       );
     });
@@ -145,7 +148,7 @@ export const SideBar = ({ id, userName }) => {
       <div className="navbar">
         <Between>
           <div className="logo-container">
-            <h4>W.o.C</h4>
+            <div className="side-bar-navbar-logo">W.o.C</div>
             <img
               onClick={HandleSwichPickFriendsState}
               className="plus-img-btn"

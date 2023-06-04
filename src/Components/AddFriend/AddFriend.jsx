@@ -91,7 +91,7 @@ export const AddFriend = () => {
       <div className="add-friend-exit-btn-container">
         <img onClick={()=> dispatch(SwichAddFriendState())} className="edit-profile-exit-btn" src="/chat-exitBtn.png" alt="" />
       </div>
-      <h3 className="add-friend-header">Add new friend</h3>
+      <div className="add-friend-header">Add new friend</div>
       <div className="inputs-container">
         <Input
         id={"add-friend-serach-input"}
@@ -100,9 +100,12 @@ export const AddFriend = () => {
           type="text"
           placeholder="Your next friend is..."
         />
-        <button onClick={handleSearch} className="search-btn-of-addFriend">
-          Search
-        </button>
+        <div className="Add-friend-btn-container">
+          <button onClick={handleSearch} className="search-btn-of-addFriend">
+            Search
+          </button>
+        </div>
+ 
       </div>
       <div className="results-of-search"></div>
     </div>

@@ -78,7 +78,7 @@ export const PickFriends = () => {
     return  (
       <div className="pick-friends-container">
         <div className="header-container">
-          <h3 className="pick-friends-header">Create a room!</h3>
+          <div className="pick-friends-header">Create a room!</div>
         </div>
         <div className="friends-list-container">
           <div className="friends-list">{friendSelectorElements}</div>
