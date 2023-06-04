@@ -203,7 +203,7 @@ router.get('/api/home/friendsdata',async(req,res) =>{
   const friends = await FindUserFriendsAsync(userName);
   const roomsForShow = await FindPreviewGroupsForUserAsync(userName);
   roomsForShow.forEach((room)=>{
-    room.img = `${process.env.API_URL}${room.img}`
+    room.img = `${process.env.REACT_APP_API_URL}${room.img}`
   })
   const invitations =  await GetUserInvitationsAsync(userName);
   const data = {
