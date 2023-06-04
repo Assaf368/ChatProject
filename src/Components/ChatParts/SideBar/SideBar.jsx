@@ -23,6 +23,8 @@ export const SideBar = ({ id, userName }) => {
     dispatch(SwichPickFriendsState());
   };
 
+
+
   const HandleSearch = (value)=>{
     const chars = value.split('');
     let updatedClientRooms = []
@@ -112,6 +114,7 @@ export const SideBar = ({ id, userName }) => {
           onClick={HandleRoomClick}
           name={chat.name}
           imgUrl={chat.img}
+          bio={chat.status? chat.status: chat.desc}
         />
       );
     });
