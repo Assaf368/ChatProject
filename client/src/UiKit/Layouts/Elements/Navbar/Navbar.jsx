@@ -29,7 +29,7 @@ const Navbar = () => {
     return (
       <nav id="navbar">
           <Line addClass={"navbar-line"} >
-              <h2>{process.env.REACT_APP_API_URL}</h2>
+              <h2>World Of Chat</h2>
               <div className='links'>
                   <Link onClick={HandleLogOut} className="link" to='/login'>Log Out</Link>
               </div>
