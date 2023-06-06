@@ -19,7 +19,7 @@ export const PickFriends = () => {
 
     useEffect(()=>{
         usernames.push(userDetails.username);
-    },[userDetails.username,usernames])
+    },[])
 
   if (friendsArray) {
      friendSelectorElements = friendsArray.map((friend,index) => {
