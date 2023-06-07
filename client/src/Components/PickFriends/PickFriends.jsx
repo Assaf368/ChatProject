@@ -65,7 +65,6 @@ export const PickFriends = () => {
     axios.post('/home/createroom', {usernames: usernames})
       dispatch(SwichPickFriendsState());
       SetUsernames([]);
-      window.location.reload();
   }
 
 
