@@ -3,7 +3,7 @@
     margin-bottom: 8px;
     gap: 4px;
     align-self: flex-end;
-    word-break:break-all; 
+    word-break:normal; 
     max-width: 40%;
 
 }
