@@ -1,6 +1,7 @@
 const Room = require("../models/Room");
 const { GetUserAsync, GetUsersByUsernamesAsync } = require("./UserFunctions");
-
+const { Readable } = require('stream');
+const cloudinary = require('cloudinary').v2;
 
 
 const _GetPreviewGroupsAsync = async (user) => {
@@ -96,11 +97,45 @@ const _GetPreviewGroupsAsync = async (user) => {
     chat.save();
   }
 
+  function UploadImgToCloud(buffer){
+    return new Promise((resolve, reject) => {
+      let url = null;
+  
+      const upload_stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "images",
+          cloud_name: 'de8l6juge',
+          api_key: '653933767978122',
+          api_secret: 'zNopyXPOhKbBSlLXqIAaMNxEWSs',
+          secure: true
+        },
+         function (error, result) {
+          if (error) {
+            console.log(error);
+            reject(error);
+          } else {
+            url = result.secure_url;
+            resolve(url);
+          }
+        }
+      );
+      Readable.from(buffer).pipe(upload_stream);
+    })
+    .then(url => {
+      return url;
+    })
+    .catch(error => {
+      console.error('Image upload error:', error);
+      throw error;
+    });
+}
+
 
   module.exports = {
     CreateRoomAsync,
     FindPreviewGroupsForUserAsync,
     FindGroupsForUserAsync,
     CreatePrivateRoomAsync,
-    AssignImgToPrivateChat
+    AssignImgToPrivateChat,
+    UploadImgToCloud
   }
