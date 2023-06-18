@@ -18,6 +18,7 @@ export const SideBar = ({ id, userName }) => {
   const userDetails = useSelector((store)=> store.userDetails);
   const chatsOnRedux = useSelector((store)=> store.onlineRooms.chats);
   const roomsForShowRedux = useSelector((store)=> store.onlineRooms.roomsForShow);
+  const sidebarRefresh = useSelector((store)=> store.toggle.sidebarRefresh)
 
   const HandleSwichPickFriendsState = () => {
     dispatch(SwichPickFriendsState());
@@ -102,7 +103,7 @@ export const SideBar = ({ id, userName }) => {
       return () => {
         dispatch(SetSelectedChatId(null));
       };
-  }, [dispatch,userName]);
+  }, [dispatch,userName,sidebarRefresh]);
 
   useEffect(()=>{
     let roomComponents = previewChatsRef.current.map((chat) => {

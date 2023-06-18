@@ -4,7 +4,7 @@ import { FriendSelector } from "Components/FriendSelector/FriendSelector";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CreateGroup } from "Components/CreateGroup/CreateGroup";
-import { SwichPickFriendsState } from "State/toggle";
+import { RefreshSideBar, SwichPickFriendsState } from "State/toggle";
 
 export const PickFriends = () => {
   const dispatch = useDispatch(); 
@@ -51,20 +51,24 @@ export const PickFriends = () => {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
+    }).then(()=>{
+      SetShowGroupComp(false);
+      dispatch(SwichPickFriendsState());
+      SetUsernames([]);
+      dispatch(RefreshSideBar());
     })
-    SetShowGroupComp(false);
-    dispatch(SwichPickFriendsState());
-    SetUsernames([]);
-    window.location.reload();
-
   }
   
   const HandleCreatePrivateChat = ()=>{
     const formData = new FormData();
     formData.append('usernames',usernames)
     axios.post('/home/createroom', {usernames: usernames})
+    .then(()=>{
       dispatch(SwichPickFriendsState());
       SetUsernames([]);
+      dispatch(RefreshSideBar());
+    })
+      
   }
 
 
