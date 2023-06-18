@@ -3,17 +3,14 @@
     margin-bottom: 8px;
     gap: 4px;
     align-self: flex-end;
-    word-break:break-all; 
-    max-width: 40%;
+    word-break:break-word; 
+    max-width: 50%;
 
 }
 
 .my-massage-text-container{
     background-color:hsla(148, 59%, 60%, 0.85);
     border-radius: 8px;
-
-
-
 }
 
 .my-massage-text{
@@ -22,7 +19,6 @@
     font-family: 'Manrope', sans-seri;
     color: white;
     padding: 8px;
-    max-width: 200px;
 }
 
 .my-massage-date-container{
@@ -39,7 +35,7 @@
     .my-massage-card{
         margin-right: 6px;
         margin-bottom: 6px;
-        max-width: 30%;
+        max-width: 70%;
     }
 
     .my-massage-text{
@@ -57,7 +53,7 @@
     .my-massage-card{
         margin-right: 6px;
         margin-bottom: 6px;
-        max-width: 30%;
+        max-width: 90%;
     }
 
     .my-massage-text{

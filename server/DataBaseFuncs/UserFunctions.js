@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const { DeleteImgFromStorage } = require("./ToolFunctions");
+const cloudinary = require('cloudinary').v2;
 
 const GetUserAsync = async (username) => {
   const user = await User.findOne({ userName: username }).catch((err) =>
@@ -32,13 +33,10 @@ const UpdateUserStatusAsync = async (username, status) => {
   user.save();
 };
 
-const UpdateUserImgAsync = async (username, img) => {
+const UpdateUserImgAsync = async (username, imgUrl) => {
   const user = await GetUserAsync(username);
-  if (user.img) {
-    DeleteImgFromStorage(user.image);
-  }
-  user.image = img;
-  user.save();
+  user.image = imgUrl;
+  await user.save();
 };
 
 const CheckIfUserExist = async (username) => {

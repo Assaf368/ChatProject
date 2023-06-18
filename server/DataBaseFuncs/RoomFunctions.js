@@ -1,6 +1,7 @@
 const Room = require("../models/Room");
 const { GetUserAsync, GetUsersByUsernamesAsync } = require("./UserFunctions");
-
+const { Readable } = require('stream');
+const cloudinary = require('cloudinary').v2;
 
 
 const _GetPreviewGroupsAsync = async (user) => {
@@ -86,7 +87,9 @@ const _GetPreviewGroupsAsync = async (user) => {
     const img = null
     const desc = null
     if(users){
-       await _SaveRoomToDbAsync(users, roomName,desc,img);
+      if(await _CheckIfPrivateRoomExist(users[0].id,users[1].id) === false){
+        await _SaveRoomToDbAsync(users, roomName,desc,img);
+      }
     }
   }
 
@@ -96,11 +99,59 @@ const _GetPreviewGroupsAsync = async (user) => {
     chat.save();
   }
 
+  function UploadImgToCloud(buffer){
+    return new Promise((resolve, reject) => {
+      let url = null;
+  
+      const upload_stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "images",
+          cloud_name: 'de8l6juge',
+          api_key: '653933767978122',
+          api_secret: 'zNopyXPOhKbBSlLXqIAaMNxEWSs',
+          secure: true
+        },
+         function (error, result) {
+          if (error) {
+            console.log(error);
+            reject(error);
+          } else {
+            url = result.secure_url;
+            resolve(url);
+          }
+        }
+      );
+      Readable.from(buffer).pipe(upload_stream);
+    })
+    .then(url => {
+      return url;
+    })
+    .catch(error => {
+      console.error('Image upload error:', error);
+      throw error;
+    });
+}
+
+  const _CheckIfPrivateRoomExist = async (member1Id, member2Id)=>{
+    const room = await Room.findOne({
+      $and: [
+        { members: { $size: 2 } },          
+        { 'members.id': { $all: [member1Id, member2Id] } }, 
+      ],
+    })
+
+    if(room !== null){
+      return true
+    }
+    return false;
+  }
+
 
   module.exports = {
     CreateRoomAsync,
     FindPreviewGroupsForUserAsync,
     FindGroupsForUserAsync,
     CreatePrivateRoomAsync,
-    AssignImgToPrivateChat
+    AssignImgToPrivateChat,
+    UploadImgToCloud
   }
