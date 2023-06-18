@@ -87,7 +87,9 @@ const _GetPreviewGroupsAsync = async (user) => {
     const img = null
     const desc = null
     if(users){
-       await _SaveRoomToDbAsync(users, roomName,desc,img);
+      if(await _CheckIfPrivateRoomExist(users[0].id,users[1].id) === false){
+        await _SaveRoomToDbAsync(users, roomName,desc,img);
+      }
     }
   }
 
@@ -129,6 +131,20 @@ const _GetPreviewGroupsAsync = async (user) => {
       throw error;
     });
 }
+
+  const _CheckIfPrivateRoomExist = async (member1Id, member2Id)=>{
+    const room = await Room.findOne({
+      $and: [
+        { members: { $size: 2 } },          
+        { 'members.id': { $all: [member1Id, member2Id] } }, 
+      ],
+    })
+
+    if(room !== null){
+      return true
+    }
+    return false;
+  }
 
 
   module.exports = {

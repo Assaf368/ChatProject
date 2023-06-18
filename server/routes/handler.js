@@ -146,6 +146,7 @@ router.post('/api/home/createroom',upload.single('image'), async (req,res)=>{
       }else{
           await CreatePrivateRoomAsync(usernamesArray,groupName);
       }
+  return res.sendStatus(200);    
 });
 
 router.post('/api/home/resetUnreadMassagesCounter', async(req,res)=>{
