@@ -13,57 +13,79 @@ export const RoomBlock = ({
   imgUrl,
   lastMassage,
   unreadMassages,
-  bio
+  bio,
 }) => {
   const dispatch = useDispatch();
 
-  const HandleViewProfile = (name, imgUrl,bio)=>{
-    dispatch(SetViewProfileDetails({username:name,imgUrl:imgUrl, desc:bio}));
+  const HandleViewProfile = (name, imgUrl, bio) => {
+    dispatch(
+      SetViewProfileDetails({ username: name, imgUrl: imgUrl, desc: bio })
+    );
     dispatch(SetViewProfileState(true));
-  }
+  };
 
-       const unreadMassagesRef = useRef(unreadMassages);
-       const [count, setCount] = useState(unreadMassages);
-       const userId = useSelector((store)=> store.userDetails.id);
+  const unreadMassagesRef = useRef(unreadMassages);
+  const [count, setCount] = useState(unreadMassages);
+  const userId = useSelector((store) => store.userDetails.id);
 
-    useEffect(()=>{
-        return ()=>{
-            if(unreadMassagesRef.current !== 0 && unreadMassagesRef.current !== undefined){
-                axios.post('/home/updateUnreadMassagesCounter',{roomId : roomId,userId:userId, count: unreadMassagesRef.current})
-                .catch(err => console.log(err));
-            }
-        }
-    },[])
+  useEffect(() => {
+    return () => {
+      if (
+        unreadMassagesRef.current !== 0 &&
+        unreadMassagesRef.current !== undefined
+      ) {
+        axios
+          .post("/home/updateUnreadMassagesCounter", {
+            roomId: roomId,
+            userId: userId,
+            count: unreadMassagesRef.current,
+          })
+          .catch((err) => console.log(err));
+      }
+    };
+  }, []);
 
-    useEffect(()=>{
-        unreadMassagesRef.current = unreadMassages;
-    },[unreadMassages])
+  useEffect(() => {
+    unreadMassagesRef.current = unreadMassages;
+  }, [unreadMassages]);
 
-    const HandleResetUnreadMassagesOnDb = ()=>{
-        if(unreadMassagesRef !== 0){
-            axios.post('/home/resetUnreadMassagesCounter',{params :{roomId : roomId,userId:userId}})
-            .catch(err => console.log(err));
-            setCount(0);
-            unreadMassagesRef.current = 0;
-        }
+  const HandleResetUnreadMassagesOnDb = () => {
+    if (unreadMassagesRef !== 0) {
+      axios
+        .post("/home/resetUnreadMassagesCounter", {
+          params: { roomId: roomId, userId: userId },
+        })
+        .catch((err) => console.log(err));
+      setCount(0);
+      unreadMassagesRef.current = 0;
     }
+  };
 
   return (
     <div
       onClick={() => {
-        onClick(roomId,name);
+        onClick(roomId, name);
         HandleResetUnreadMassagesOnDb();
       }}
       className="user-block-container"
     >
       <Line>
-        <img onClick={ ()=> HandleViewProfile(name,imgUrl,bio)} src={imgUrl} alt="user" />
+        <img
+          onClick={(event) => {
+            event.stopPropagation();
+            HandleViewProfile(name, imgUrl, bio);
+          }}
+          src={imgUrl}
+          alt="user"
+        />
         <div className="details-container">
           <Rows>
             <div className="name-div">{name}</div>
             <div className="massage-div">{lastMassage}</div>
-            </Rows>
-            {unreadMassages !== 0 ?<div className="unread-massages-counter">{unreadMassages}</div> :null}
+          </Rows>
+          {unreadMassages !== 0 ? (
+            <div className="unread-massages-counter">{unreadMassages}</div>
+          ) : null}
         </div>
       </Line>
     </div>

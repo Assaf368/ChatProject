@@ -13,6 +13,7 @@ export const PickFriends = () => {
     const [usernames, SetUsernames] = useState([]);
     const [showGroupComp, SetShowGroupComp] = useState(false);
     const[image, SetImage] = useState(null);
+    const [isLoading,SetIsLoading] = useState(false);
     const state = toggle.pickFriendsState;
     const friendsArray = userDetails.friends;
     let friendSelectorElements = null;
@@ -37,9 +38,8 @@ export const PickFriends = () => {
     }
   }
 
-  
-
   const HandleSubmitGroup = ()=>{
+    SetIsLoading(true)
     const groupName = document.querySelector('#group-name-input').value;
     const desc = document.querySelector('#discription-input').value;
     const formData = new FormData();
@@ -52,8 +52,9 @@ export const PickFriends = () => {
         'Content-Type': 'multipart/form-data'
       }
     }).then(()=>{
-      SetShowGroupComp(false);
+      SetIsLoading(false)
       dispatch(SwichPickFriendsState());
+      SetShowGroupComp(false);
       SetUsernames([]);
       dispatch(RefreshSideBar());
     })
@@ -68,13 +69,12 @@ export const PickFriends = () => {
       SetUsernames([]);
       dispatch(RefreshSideBar());
     })
-      
   }
 
 
   if(state && showGroupComp){
     return(
-      <CreateGroup SetImage={SetImage} onSubmit={HandleSubmitGroup}></CreateGroup>
+      <CreateGroup SetImage={SetImage} isLoading={isLoading} onSubmit={HandleSubmitGroup}></CreateGroup>
     )
   }
   if(state){

@@ -17,7 +17,7 @@ export const ViewProfile = ({state})=>{
                 <img className='view-profile-img' src={viewProfile.imgUrl} alt="" />
             </div>
             <div className='view-profile-username-container'>{viewProfile.username}</div>
-            <div className='view-profile-status-container'>{'grgsetgstgg'}</div>
+            <div className='view-profile-status-container'>{viewProfile.desc}</div>
         </div>
     ): null
 }
