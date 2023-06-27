@@ -67,20 +67,20 @@
   }
   @media only screen and (min-width: 320px) and (max-width:500px) {
     .view-profile-container{
-        width: 25%;
-        height: 35%;
+        width: 60%;
+        height: 60%;
     }
     .view-profile-img{
-        height: 45px;
-        width: 45px;
+        height: 110px;
+        width: 110px;
     }
 
     .view-profile-username-container{
-        font-size: 20px;
+        font-size: 40px;
     }
     
     .view-profile-status-container{
-        font-size: 12px;
+        font-size: 26px;
     }
   }
 
