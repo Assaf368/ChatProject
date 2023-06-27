@@ -3,8 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     chats : [],
     roomsForShow: [],
-    selectedChatId: null
-
+    selectedChat: null
 }
 
 export const onlineRoomsSlice = createSlice({
@@ -14,8 +13,8 @@ export const onlineRoomsSlice = createSlice({
         AddChatToRedux :(state, action)=>{
             state.chats.push(action.payload);
         },
-        SetSelectedChatId:(state,action) =>{
-                state.selectedChatId = action.payload;
+        SetSelectedChat:(state,action) =>{
+                state.selectedChat = action.payload;
         },
         AddMassageToChat:(state,action) =>{
             const chat = state.chats.find(chat=> chat._id === action.payload.roomId);
@@ -30,13 +29,16 @@ export const onlineRoomsSlice = createSlice({
                 target: roomId
             }
             chat.massages.push(massage);
+            if(state.selectedChat._id === roomId){
+                state.selectedChat.massages.push(massage)
+            }
     },
     SetRoomsForShowRedux:(state,action) =>{
         state.roomsForShow = action.payload;
-}
+    },
     }
 })
 
-export const{SetSelectedChatId,AddChatToRedux,AddMassageToChat,SetRoomsForShowRedux} = onlineRoomsSlice.actions;
+export const{SetSelectedChat,AddChatToRedux,AddMassageToChat,SetRoomsForShowRedux,SetChanged} = onlineRoomsSlice.actions;
 
 export default onlineRoomsSlice.reducer;

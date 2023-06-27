@@ -3,10 +3,9 @@ import Navbar from "UiKit/Layouts/Elements/Navbar/Navbar";
 import { Login } from "./Login";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Menu } from "UiKit/Layouts/Elements/Menu/Menu";
 import { AddFriend } from "Components/AddFriend/AddFriend";
 import { useDispatch, useSelector } from "react-redux";
-import { SetUserDetails, SetUserId, SetUserName } from "State/userDetails";
+import { SetUserDetails } from "State/userDetails";
 import { PickFriends } from "Components/PickFriends/PickFriends";
 import { SetChatState } from "State/toggle";
 import { SetSocketConnection } from "State/socket";
@@ -14,6 +13,7 @@ import io from "socket.io-client";
 import { ViewProfile } from "Components/ViewProfile/ViewProfile";
 import { EditProfile } from "Components/EditProfile/EditProfile";
 import { useNavigate } from "react-router-dom";
+import './Home.css'
 
 
 export const Home = () => {
@@ -47,14 +47,19 @@ export const Home = () => {
 
   if (auth === true) {
     return (
-      <>
-        <Navbar />
-        <Chat userName={userDetails.username} />
-        <AddFriend state={toggle.addFriendState}></AddFriend>
-        {toggle.pickFriendsState && <PickFriends></PickFriends>}
-        <ViewProfile state={toggle.viewProfileState}/>
-        <EditProfile state={toggle.editProfileState}/>
-      </>
+      <div className="home-container">
+        <div className="navbar-container">
+          <Navbar />
+        </div>
+        <div className="rest-of-component-container">
+          <Chat userName={userDetails.username} />
+          <AddFriend state={toggle.addFriendState}></AddFriend>
+          {toggle.pickFriendsState && <PickFriends></PickFriends>}
+          <ViewProfile state={toggle.viewProfileState}/>
+          <EditProfile state={toggle.editProfileState}/>
+        </div>
+
+      </div>
     );
   } else {
     return <Login></Login>;

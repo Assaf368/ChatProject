@@ -2,10 +2,10 @@
   display: flex;
   position: fixed;
   flex-direction: column;
-  height: 55%;
+  height: 70%;
   width: 30%;
   background-color: rgb(110, 116, 171);
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border-radius: 12px;
   
@@ -40,24 +40,20 @@
 .submit-group-container {
   display: flex;
   flex: 1.5; 
-  width: 50%;
+  width: 100%;
   justify-content: center;
   align-items: center;
 
 }
 
 
-.browse-btn {
-    height: 30%;
-}
-
 .group-label{
     color: white;
 }
 
 .submit-group-button {
-    height: 60%;
-    width: 40%;
+    height: 50%;
+    width: 60%;
     font-size: 18px;
     border-radius: 20px;
 }
@@ -78,7 +74,7 @@
 }
 
 .create-group-header{
-  font-size: 36px;
+  font-size: 40px;
   color: white;
   margin-bottom: 16px;
 }
@@ -89,4 +85,42 @@
 
 #group-name-input{
   background-color: rgb(110, 116, 171);
+}
+
+
+
+@media only screen and (min-width: 501px) and (max-width:960px) {
+
+  .create-group-container {
+    height: 70%;
+    width: 50%;
+
+  }
+  .submit-group-button {
+    height: 50%;
+    width: 40%;
+    font-size: 16px;
+}
+
+.create-group-header{
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+}
+@media only screen and (min-width: 320px) and (max-width:500px) {
+  .create-group-container {
+    height: 70%;
+    width: 55%;
+
+  }
+  .submit-group-button {
+    height: 50%;
+    width: 40%;
+    font-size: 16px;
+}
+
+.create-group-header{
+  font-size: 20px;
+  margin-bottom: 16px;
+}
 }

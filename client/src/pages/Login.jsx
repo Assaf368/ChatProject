@@ -3,6 +3,7 @@ import { SetChatState } from "State/toggle"
 import Navbar from "UiKit/Layouts/Elements/Navbar/Navbar"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import './Login.css'
 
 
 export const Login = () =>{
@@ -12,10 +13,14 @@ export const Login = () =>{
     },[])
 
     return(
-        <>
-        <Navbar/>
-        <LogIn/>
-    </>
+        <div className="Login-container">
+            <div className="navbar-container">
+              <Navbar/>
+            </div>
+            <div className="Login-Component-container">
+              <LogIn/>
+            </div>
+        </div>
         
 
     )

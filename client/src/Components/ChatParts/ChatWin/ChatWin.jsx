@@ -2,14 +2,15 @@ import { Between, Line } from "UiKit/Layouts/Line/Line";
 import { Massage } from "../massage/Massage";
 import "./ChatWin.css";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { MyMassage } from "../MyMassage/MyMassage";
+import onlineRooms from "State/onlineRooms";
 
 
-export const WinChat = ({ id }) => {
-  const selectedChat = useSelector(store => store.onlineRooms.chats.find(chat=> chat._id === store.onlineRooms.selectedChatId));
+export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
   const socket = useSelector((store)=> store.socket.socket);
   const userDetails = useSelector((store)=> store.userDetails);
+  const selectedChat = useSelector((store)=> store.onlineRooms.selectedChat);
 
 
   const HandleSendMassage = ()=>{
@@ -26,6 +27,7 @@ export const WinChat = ({ id }) => {
     }
   }
 
+
   const HandleKeyDown = (event)=>{
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -38,16 +40,16 @@ export const WinChat = ({ id }) => {
     if(massagesDiv){
       massagesDiv.scrollTop = massagesDiv.scrollHeight;
     }
-  })
+  },[selectedChat])
 
- 
   
   if(selectedChat){
     return (
-      <div id={id}>
-        <div className="chat-info">
+      <div ref={ref} id={id}>
+        <div  className="chat-info">
           <Between>
             <Line>
+              {isMobile? <img alt="back-arrow" onClick={()=>SetMobileRoomView(false)} className="go-back-arrow-image" src="goBackArrow.png"></img>: null}
             <img src={selectedChat.name? selectedChat.img : selectedChat.members.find(member => member.username !== userDetails.username).img} alt="" />
               <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
             </Line>
@@ -101,10 +103,10 @@ export const WinChat = ({ id }) => {
   }
   else{
     return(
-      <div className="non-selcted-room-view">
+      <div ref={ref}  className="non-selcted-room-view">
         <img className="chatWin-non-selected-room-bgc" src="space-g257c0171b_1280.png" alt="" />
       </div>
     )
   }
   
-};
+});

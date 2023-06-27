@@ -19,12 +19,13 @@
     font-size: 12px;
     font-weight: bold;
     justify-content: flex-start;
-    width: 90%;
+    width: 100%;
     color: rgb(73, 71, 71);
+    margin-left: 6px;
 }
 
 .name{
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
 }
 
@@ -64,7 +65,8 @@
     border-radius: 8px;
     min-height: 20px;
     align-items: center;
-
+    justify-content: center;
+    min-width: 40px;
 }
 
 @media only screen and (min-width: 501px) and (max-width:960px) {
@@ -104,19 +106,19 @@
         margin-bottom: 2px;
     }
     .date-container{
-        font-size: 6px;
+        font-size: 12px;
     }
     .name{
-        font-size: 8px;
+        font-size: 10px;
     }
     .massage-text{
-        font-size: 10px;
+        font-size: 20px;
         padding: 4px;
     }
     .img{
         background-color: #ddddf7;
-        height: 20px;
-        width: 20px;
+        height: 40px;
+        width: 40px;
     }
 
     .text-container{

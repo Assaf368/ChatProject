@@ -10,7 +10,7 @@ export const Massage = ({text, name, img,date})=>{
           <div className='massage-card'>
             <div className='img-and-name-container'>
                     <img className='img' src={img} alt="" />
-                    <span className='name'>{name}</span>
+                    <span className='name'>hjhjrtrhtyt</span>
               </div>
               <div className='text-container'>
                 <div className='massage-text'>{text}</div>

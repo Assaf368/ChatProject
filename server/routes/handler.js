@@ -73,6 +73,8 @@ router.post('/api/home/updateprofile',upload.single('image'), async(req,res)=>{
   if(imgUrl){
     await UpdateUserImgAsync(username, imgUrl);
   }
+  return res.sendStatus(200);
+
 })
 
 router.post("/api/login", async (req, res) => {

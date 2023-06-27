@@ -7,13 +7,15 @@ html, body ,#root , .App{
 
 * {
   margin: 0;
+  padding: 0px;
 }
 
-#root{
+/* #root{
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-}
+} */
 
 
 

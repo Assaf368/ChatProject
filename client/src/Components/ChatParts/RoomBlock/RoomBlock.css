@@ -2,6 +2,7 @@
 
 
 .user-block-container{
+    display: flex;
     height: 70px;
     width: 100%;
     background-color: #3e3c61;
@@ -80,16 +81,14 @@ img{
     @media only screen and (min-width: 320px) and (max-width:500px) {
  
         .name-div{
-            font-size: 10px;
+            font-size: 26px;
         }
-        .massage-div{
-            font-size: 6px;
-        }
+
         .user-block-container{
-            height: 45px;
+            height: 80px;
         }
         img{
-            height: 25px;
-            width: 25px;
+            height: 60px;
+            width: 60px;
         }
     }

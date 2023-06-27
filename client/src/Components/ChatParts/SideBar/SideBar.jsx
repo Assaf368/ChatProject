@@ -1,19 +1,19 @@
 import axios from "axios";
-import { useEffect, useRef, useState} from "react";
+import { forwardRef, useEffect, useRef, useState} from "react";
 import { Between } from "UiKit/Layouts/Line/Line";
 import { RoomBlock } from "../RoomBlock/RoomBlock";
 import "./SideBar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { SetFriends, SetInvitations } from "State/userDetails";
 import { SetEditProfileState, SwichPickFriendsState } from "State/toggle";
-import {  AddChatToRedux, AddMassageToChat, SetRoomsForShowRedux, SetSelectedChatId } from "State/onlineRooms";
+import {  AddChatToRedux, AddMassageToChat, SetChanged, SetRoomsForShowRedux, SetSelectedChat } from "State/onlineRooms";
 
-export const SideBar = ({ id, userName }) => {
+export const SideBar = forwardRef (({ id, userName,SetMobileRoomView },ref) => {
   const dispatch = useDispatch();
   const [clientRooms, SetClientRooms] = useState([]);
   const[unreadCounts, SetUnreadCounts] = useState([]);
   let previewChatsRef = useRef([]);
-  let selectedId = useRef(null);
+  let selectedChat = useRef(null);
   const socket = useSelector((store) => store.socket.socket);
   const userDetails = useSelector((store)=> store.userDetails);
   const chatsOnRedux = useSelector((store)=> store.onlineRooms.chats);
@@ -57,27 +57,28 @@ export const SideBar = ({ id, userName }) => {
       }
     }
 
-  const HandleRoomClick = (roomId,target) => {
+  const HandleRoomClick =  (roomId,target) => {
     SetUserUnreadMassagesCounter(roomId,0);
     let selected = null;
     const reduxChat = chatsOnRedux.find(chat => chat._id === roomId);
     if(reduxChat === undefined){
-      axios
+        axios
       .get("/home/getfullchat", { params: { roomId: roomId, target: target } })
       .then((res) => {
         selected = res.data.chat;
         dispatch(AddChatToRedux(selected));
-        dispatch(SetSelectedChatId(selected._id));
-        selectedId.current = selected._id;
+        dispatch(SetSelectedChat(selected));
+        console.log(selected)
+        selectedChat.current = selected
       });
     }else{
-      selected = reduxChat;
-      dispatch(SetSelectedChatId(selected._id));
-      selectedId.current = selected._id;
+      dispatch(SetSelectedChat(reduxChat));
+      selectedChat.current = reduxChat
     }
     let searchInput = document.querySelector('.side-bar-serach-input');
     searchInput.value = '';
   };
+
   useEffect(() => {
     axios
       .get('/home/friendsdata',{
@@ -101,7 +102,7 @@ export const SideBar = ({ id, userName }) => {
       });
 
       return () => {
-        dispatch(SetSelectedChatId(null));
+        dispatch(SetSelectedChat(null));
       };
   }, [dispatch,userName,sidebarRefresh]);
 
@@ -116,6 +117,7 @@ export const SideBar = ({ id, userName }) => {
           name={chat.name}
           imgUrl={chat.img}
           bio={chat.status? chat.status: chat.desc}
+          SetMobileRoomView={SetMobileRoomView}
         />
       );
     });
@@ -126,7 +128,7 @@ export const SideBar = ({ id, userName }) => {
 
 
   const SetUserUnreadMassagesCounter = (roomId,newCount)=>{
-    if( selectedId.current === null ||selectedId.current !== roomId){
+    if( selectedChat.current === null ||selectedChat.current._id !== roomId){
       const index = unreadCounts.findIndex((count) => count.roomId === roomId);
       const updatedCounts = [...unreadCounts];
       if(newCount !== 0){
@@ -145,7 +147,7 @@ export const SideBar = ({ id, userName }) => {
   });
 
   return (
-    <div id={id} className="sidebar-container">
+    <div ref={ref} id={id} className="sidebar-container">
       <div className="navbar">
         <Between>
           <div className="logo-container">
@@ -184,4 +186,4 @@ export const SideBar = ({ id, userName }) => {
       </div>
     </div>
   );
-};
+});

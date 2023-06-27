@@ -5,12 +5,16 @@
     align-self: flex-end;
     word-break:break-word; 
     max-width: 50%;
-
 }
 
 .my-massage-text-container{
     background-color:hsla(148, 59%, 60%, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-radius: 8px;
+    min-width: 40px;
 }
 
 .my-massage-text{
@@ -26,8 +30,9 @@
     font-size: 12px;
     justify-content: flex-end;
     font-weight: bold;
-    width: 98%;
+    width: 100%;
     color: rgb(73, 71, 71);
+    margin-right: 6px;
 }
 
 @media only screen and (min-width: 501px) and (max-width:960px) {
@@ -57,11 +62,11 @@
     }
 
     .my-massage-text{
-        font-size: 10px;
+        font-size: 20px;
         padding: 4px;
     }
 
     .my-massage-date-container{
-        font-size: 6px;
+        font-size: 12px;
     }
 }

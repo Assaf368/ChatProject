@@ -14,6 +14,7 @@ export const RoomBlock = ({
   lastMassage,
   unreadMassages,
   bio,
+  SetMobileRoomView
 }) => {
   const dispatch = useDispatch();
 
@@ -49,9 +50,9 @@ export const RoomBlock = ({
     unreadMassagesRef.current = unreadMassages;
   }, [unreadMassages]);
 
-  const HandleResetUnreadMassagesOnDb = () => {
+  const HandleResetUnreadMassagesOnDb =  () => {
     if (unreadMassagesRef !== 0) {
-      axios
+       axios
         .post("/home/resetUnreadMassagesCounter", {
           params: { roomId: roomId, userId: userId },
         })
@@ -64,8 +65,9 @@ export const RoomBlock = ({
   return (
     <div
       onClick={() => {
-        onClick(roomId, name);
+        onClick(roomId, name)
         HandleResetUnreadMassagesOnDb();
+        SetMobileRoomView(true)
       }}
       className="user-block-container"
     >

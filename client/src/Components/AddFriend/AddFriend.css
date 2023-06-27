@@ -83,15 +83,8 @@
 }
 @media only screen and (min-width: 320px) and (max-width:500px) {
     .add-friend-container{
-        width: 30%;
-        height: 35%;
-    }
-    .search-btn-of-addFriend{
-        font-size: 10px;
-
-    }
-    .add-friend-header{
-        font-size: 16px;
+        width: 45%;
+        height: 50%;
     }
 
 }
