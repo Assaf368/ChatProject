@@ -16,7 +16,7 @@ export const CreateGroup = ({onSubmit,SetImage,isLoading})=>{
                 </div>
                 <div className='create-group-header'>Create a group!</div>
                 <div className='group-name-container'>
-                    <Input title="Name" id='group-name-input' className='create-group-inputs' type="text" placeholder='Chose your group name...' />
+                    <Input required ={"required"} title="Name" id='group-name-input' className='create-group-inputs' type="text" placeholder='Chose your group name...' />
                 </div>
                 <div className='discription-container'>
                     <Input title="Description" id='discription-input' className='create-group-inputs' type="text" placeholder='A bit more info...' />

@@ -5,8 +5,8 @@ const initialState = {
     id:null,
     status:null,
     img:null,
-    friends:null,
-    invitations:null
+    friends:[],
+    invitations:[]
 }
 
 export const userDetailsSlice = createSlice({

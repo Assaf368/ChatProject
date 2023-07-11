@@ -56,6 +56,7 @@ export const LogIn = () => {
                 type="text"
                 minLength={3}
                 maxLength={20}
+                required={"required"}
                 >
               </Input>
               <Input
@@ -68,7 +69,7 @@ export const LogIn = () => {
                 type="password"
                 minLength={8}
                 maxLength={30}
-                required
+                required={"required"}
               />
             </div>
               

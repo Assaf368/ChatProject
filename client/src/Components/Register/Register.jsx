@@ -146,7 +146,7 @@ const Register = () => {
                 onBlur={CheckUsernameValidationServer}
                 minLength={3}
                 maxLength={20}
-                required
+                required={"required"}
                 placeholder="Choose your username"
                 className="element input username-input"
                 type="text"
@@ -158,6 +158,7 @@ const Register = () => {
               )}
               <Input ref={passwordEl}
                 title="Password"
+                required={"required"}
                 onInput={(e) => setPasswordVal(e.target.value)}
                 onBlur={CheckPasswordVallidation}
                 placeholder="8-30, one capital
@@ -172,7 +173,7 @@ const Register = () => {
                 onInput={(e) => setConfirmPasswordVal(e.target.value)}
                 onBlur={CheckConfirmPassword}
                 placeholder="Confirm password"
-                required
+                required={"required"}
                 className="element input confirm-input"
                 type="password"
               />

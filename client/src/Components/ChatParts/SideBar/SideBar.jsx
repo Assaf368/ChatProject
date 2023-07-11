@@ -92,7 +92,7 @@ export const SideBar = forwardRef (({ id, userName,SetMobileRoomView },ref) => {
         if (roomsForShow) {
           previewChatsRef.current = roomsForShow;
           let counts = roomsForShow.map((room) => {
-            return { roomId: room._id, unreadMassages: room.unreadMassagesCounter };
+            return { roomId: room._id, unreadMassages: room.unreadMassagesCounter, desc: room.desc };
           });
           SetUnreadCounts(counts);
         }
@@ -116,7 +116,7 @@ export const SideBar = forwardRef (({ id, userName,SetMobileRoomView },ref) => {
           onClick={HandleRoomClick}
           name={chat.name}
           imgUrl={chat.img}
-          bio={chat.status? chat.status: chat.desc}
+          bio={ chat.desc}
           SetMobileRoomView={SetMobileRoomView}
         />
       );
