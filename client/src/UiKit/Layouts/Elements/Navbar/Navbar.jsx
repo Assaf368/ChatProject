@@ -108,7 +108,7 @@ const Navbar = () => {
               <div className='navbar-logo'>World Of Chat</div>
               <div className='dropdowns-container'>
                 <Dropdown id={"menu-dropdown"} header={'Menu'}><button className='menu-toggle-btns' onClick={HandleAddFriendSwichState}>Add Friend</button></Dropdown>
-                <Dropdown id={"requests-dropdown"} header={'Reqests'}>{requests? requests : <div>fghtjhrth</div>}</Dropdown>
+                <Dropdown indicator={ invitations.length === 0 ? false : true} id={"requests-dropdown"} header={'Reqests'}>{requests? requests : 'gfrhger'}</Dropdown>
               </div>
               <div className='connected-links'>
                   <Link  onClick={HandleLogOut} className="link logout-btn" to='/login'>Log Out</Link>

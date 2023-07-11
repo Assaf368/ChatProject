@@ -11,6 +11,7 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
   const socket = useSelector((store)=> store.socket.socket);
   const userDetails = useSelector((store)=> store.userDetails);
   const selectedChat = useSelector((store)=> store.onlineRooms.selectedChat);
+  const [privateChat, setPrivateChat] = useState(false)
 
 
   const HandleSendMassage = ()=>{
@@ -50,8 +51,9 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
           <Between>
             <Line>
               {isMobile? <img alt="back-arrow" onClick={()=>SetMobileRoomView(false)} className="go-back-arrow-image" src="goBackArrow.png"></img>: null}
-            <img src={selectedChat.name? selectedChat.img : selectedChat.members.find(member => member.username !== userDetails.username).img} alt="" />
+              <img src={selectedChat.name? selectedChat.img : selectedChat.members.find(member => member.username !== userDetails.username).img} alt="" />
               <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
+              {selectedChat.members.length > 2?<div className="members-name">{selectedChat.members.map(member => member.username).join(', ')}</div> : null}
             </Line>
             <div className="chat-icons">
               <img

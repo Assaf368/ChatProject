@@ -12,6 +12,7 @@ export const Dropdown = (props) => {
     <div id={props.id} className="dropdown-container">
       <div className="dropdown-header" onClick={HandleHeaderClick}>
         {props.header}
+        {props.indicator?<div className="red-dot"></div>: null}
       </div>
       {visible && (
         <div className="dropdown-list">
