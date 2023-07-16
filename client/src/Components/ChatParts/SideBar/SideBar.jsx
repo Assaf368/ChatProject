@@ -68,7 +68,6 @@ export const SideBar = forwardRef (({ id, userName,SetMobileRoomView },ref) => {
         selected = res.data.chat;
         dispatch(AddChatToRedux(selected));
         dispatch(SetSelectedChat(selected));
-        console.log(selected)
         selectedChat.current = selected
       });
     }else{

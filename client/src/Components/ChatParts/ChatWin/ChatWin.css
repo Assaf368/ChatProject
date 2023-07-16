@@ -10,10 +10,9 @@
 }
 
 .info-element {
-  margin: 10px;
   font-weight: bold;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 26px;
 
 }
 
@@ -64,11 +63,11 @@
   display: flex;
   justify-content: space-between;
   flex: 1;
-  border-radius: 12px;
-  border-bottom-left-radius: 0px;
+  min-height: 28px;
 }
 
 .input-container {
+  
   height: 100%;
   flex: 8;
 }
@@ -83,7 +82,6 @@
   border-bottom-left-radius: 0px;
   border-top-right-radius: 0px;
   height: 100%;
-  
 
 }
 .text-massage-input {
@@ -130,6 +128,7 @@
   flex: 2;
   align-items: center;
   justify-content: center; 
+  border-radius: 12px;
 }
 
 .chatWin-non-selected-room-bgc{
@@ -138,13 +137,25 @@
   object-fit: fill;
   border-radius: 0;
   margin: 0px;
+  border-radius: 12px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 0px;
+
 }
 
 .members-name{
-  width: 200px;
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+.name-and-members-names-container{
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  
 }
 @media only screen and (min-width: 501px) and (max-width:960px) {
   .info-element {
@@ -185,6 +196,10 @@
     margin: 4px;
     font-size: 24px;
   
+  }
+
+  .members-name{
+    font-size: 13px;
   }
   .img-icon {
     height: 40px;

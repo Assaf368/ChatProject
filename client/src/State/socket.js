@@ -10,7 +10,6 @@ export const socketSlice = createSlice({
   reducers: {
     SetSocketConnection: (state ,action) => {
       state.socket = action.payload;
-      console.log("socket connected")
     },
   },
 });

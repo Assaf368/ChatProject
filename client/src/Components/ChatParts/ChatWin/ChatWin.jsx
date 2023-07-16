@@ -52,8 +52,11 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
             <Line>
               {isMobile? <img alt="back-arrow" onClick={()=>SetMobileRoomView(false)} className="go-back-arrow-image" src="goBackArrow.png"></img>: null}
               <img src={selectedChat.name? selectedChat.img : selectedChat.members.find(member => member.username !== userDetails.username).img} alt="" />
-              <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
-              {selectedChat.members.length > 2?<div className="members-name">{selectedChat.members.map(member => member.username).join(', ')}</div> : null}
+              <div className="name-and-members-names-container">
+                <span className="info-element">{selectedChat.name? selectedChat.name : selectedChat.members.find(member => member.username !== userDetails.username).username}</span>
+                {selectedChat.members.length > 2?<div className="members-name">{selectedChat.members.map(member => member.username).join(', ')}</div> : null}
+              </div>
+              
             </Line>
             <div className="chat-icons">
               <img
