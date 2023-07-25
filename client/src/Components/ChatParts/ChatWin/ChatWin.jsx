@@ -129,7 +129,7 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
                 return(
                   <>
                     {massage.isDayChanged && <div className="date-label">{massage.fullDate? FormatDateToYYYYMMDD(massage.fullDate): null}</div>}
-                    <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/> 
+                    <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members ? selectedChat.members.find(member => member.username === massage.name).img : null} text={massage.text}/> 
                   </>
                 ) 
             }else{
