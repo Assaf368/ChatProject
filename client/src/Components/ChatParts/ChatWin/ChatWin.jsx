@@ -2,7 +2,7 @@ import { Between, Line } from "UiKit/Layouts/Line/Line";
 import { Massage } from "../massage/Massage";
 import "./ChatWin.css";
 import { useSelector } from "react-redux";
-import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect,  useRef, useState } from "react";
 import { MyMassage } from "../MyMassage/MyMassage";
 import onlineRooms from "State/onlineRooms";
 
@@ -129,7 +129,7 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
                 return(
                   <>
                     {massage.isDayChanged && <div className="date-label">{massage.fullDate? FormatDateToYYYYMMDD(massage.fullDate): null}</div>}
-                    <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members ? selectedChat.members.find(member => member.username === massage.name).img : null} text={massage.text}/> 
+                    <Massage key={massage._id} name={massage.name} date={massage.date} img={ selectedChat.members.find(member => member.username === massage.name) ? selectedChat.members.find(member => member.username === massage.name).img : null} text={massage.text}/> 
                   </>
                 ) 
             }else{
