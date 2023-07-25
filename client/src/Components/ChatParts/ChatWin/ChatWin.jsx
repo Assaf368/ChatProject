@@ -2,7 +2,7 @@ import { Between, Line } from "UiKit/Layouts/Line/Line";
 import { Massage } from "../massage/Massage";
 import "./ChatWin.css";
 import { useSelector } from "react-redux";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { MyMassage } from "../MyMassage/MyMassage";
 import onlineRooms from "State/onlineRooms";
 
@@ -12,6 +12,41 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
   const userDetails = useSelector((store)=> store.userDetails);
   const selectedChat = useSelector((store)=> store.onlineRooms.selectedChat);
   const [privateChat, setPrivateChat] = useState(false)
+  const prevDay = useRef(null);
+  const [messagesWithDayFlag, setMessagesWithDayFlag] = useState([]);
+
+
+  const IsDayChanged = (currentDate) => {
+    if (prevDay.current === null) {
+      const currentDateObj = new Date(currentDate);
+      prevDay.current = currentDateObj;
+      return true;
+    }
+    const currentDateObj = new Date(currentDate);
+
+    const currentYear = currentDateObj.getFullYear();
+    const currentMonth = currentDateObj.getMonth();
+    const currentDay = currentDateObj.getDate();
+    const prevYear = prevDay.current.getFullYear();
+    const prevMonth = prevDay.current.getMonth();
+    const prevDayOfMonth = prevDay.current.getDate();
+  
+    if (currentYear > prevYear || currentMonth > prevMonth || currentDay > prevDayOfMonth) {
+      prevDay.current = currentDate
+      return true;
+    }
+  
+    return false;
+  };
+
+  function FormatDateToYYYYMMDD(date) {
+    const currentDateObj = new Date(date);
+    const year = currentDateObj.getFullYear();
+    const month = String(currentDateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(currentDateObj.getDate()).padStart(2, '0');
+  
+    return `${day}/${month}/${year}`;
+  }
 
 
   const HandleSendMassage = ()=>{
@@ -37,11 +72,25 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
   }
 
   useEffect(()=>{
+    prevDay.current = null
     const massagesDiv = document.querySelector('.massages-card');
     if(massagesDiv){
       massagesDiv.scrollTop = massagesDiv.scrollHeight;
     }
   },[selectedChat])
+
+
+  useEffect(() => {
+    if (!selectedChat || !selectedChat.massages) return;
+
+    const messagesWithFlag = selectedChat.massages.map((massage) => {
+      const isDayChanged = IsDayChanged(massage.fullDate);
+      return { ...massage, isDayChanged };
+    });
+
+    setMessagesWithDayFlag(messagesWithFlag);
+
+  }, [ selectedChat]);
 
   
   if(selectedChat){
@@ -75,11 +124,21 @@ export const WinChat = forwardRef (({ id,isMobile,SetMobileRoomView },ref) => {
           </Between>
         </div>
         <div className="massages-card">
-          {selectedChat.massages? selectedChat.massages.map(massage =>{
+          {messagesWithDayFlag? messagesWithDayFlag.map(massage =>{
             if(massage.name !== userDetails.username){
-              return <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/>
+                return(
+                  <>
+                    {massage.isDayChanged && <div className="date-label">{massage.fullDate? FormatDateToYYYYMMDD(massage.fullDate): null}</div>}
+                    <Massage key={massage._id} name={massage.name} date={massage.date} img={selectedChat.members.find(member => member.username === massage.name).img} text={massage.text}/> 
+                  </>
+                ) 
             }else{
-              return <MyMassage key={massage._id} text={massage.text} date={massage.date} />
+                return(
+                  <>
+                   {massage.isDayChanged && <div className="date-label">{massage.fullDate?FormatDateToYYYYMMDD(massage.fullDate): null}</div>}
+                   <MyMassage key={massage._id} text={massage.text} date={massage.date} />
+                  </>
+                ) 
             }
           }): null }
         </div>

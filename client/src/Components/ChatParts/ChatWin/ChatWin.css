@@ -151,6 +151,20 @@
   font-size: 14px;
 }
 
+.date-label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22%;
+  height: 6%;
+  align-self: center;
+  background-color: rgba(249, 242, 242, 0.8);
+  border-radius: 20px;
+  font-weight: bold;
+  min-height: 16px;
+
+}
+
 .name-and-members-names-container{
   display: flex;
   flex-direction: column;
@@ -166,6 +180,15 @@
   .img-icon {
     height: 22px;
     width: 22px;
+  }
+
+  .date-label{
+  
+    width: 22%;
+    height: 6%;
+    border-radius: 20px;
+    font-size: 10px;
+  
   }
 
   .text-massage-input {

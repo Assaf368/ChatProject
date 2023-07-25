@@ -26,6 +26,7 @@ export const onlineRoomsSlice = createSlice({
                 name: username,
                 sender: senderId,
                 date:time,
+                fullDate: now,
                 target: roomId
             }
             chat.massages.push(massage);
